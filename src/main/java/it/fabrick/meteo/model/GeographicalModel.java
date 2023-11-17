@@ -14,5 +14,5 @@ public class GeographicalModel {
 
     private Double lat;
 
-    private String istat;
+
 }

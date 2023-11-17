@@ -24,7 +24,7 @@ public class RegionsModel{
     private String presidente;
 
 
-    private List<CitiesResponseDto> cities;
+    private List<CitiesModel> cities;
 
     private List<ProvinciesResponseDto> provincies;
 }

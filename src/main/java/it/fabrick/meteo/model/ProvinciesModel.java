@@ -1,7 +1,5 @@
 package it.fabrick.meteo.model;
 
-import it.fabrick.meteo.dto.CitiesResponseDto;
-import it.fabrick.meteo.dto.RegionsResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -21,7 +19,7 @@ public class ProvinciesModel {
     private Integer residenti;
 
 
-    private List<CitiesResponseDto> cities;
+    private List<CitiesModel> cities;
 
 
 }
