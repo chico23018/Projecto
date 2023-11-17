@@ -27,6 +27,8 @@ public class ProvinciesEntity {
     @JoinColumn(
             name = "id_regione",
             referencedColumnName = "id_regione" )
+
     private RegionsEntity regions;
+
 
 }

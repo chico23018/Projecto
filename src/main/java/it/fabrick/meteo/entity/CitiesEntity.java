@@ -14,14 +14,13 @@ import java.util.List;
 public class CitiesEntity {
     @Id
     @Column(name = "istat")
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long istat;
     @Column(name = "comune")
     private String comune;
     @Column(name = "prefisso")
     private Integer prefisso;
     @Column(name = "cod_fisco")
-    private Integer cod_fisco;
+    private String cod_fisco;
     @Column(name = "superficie")
     private Double superficie;
     @Column(name = "num_residenti")

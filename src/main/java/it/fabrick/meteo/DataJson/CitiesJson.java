@@ -1,16 +1,11 @@
-package it.fabrick.meteo.model;
+package it.fabrick.meteo.DataJson;
 
-import it.fabrick.meteo.entity.GeographicalEntity;
 import lombok.Getter;
 import lombok.Setter;
 
-import java.util.List;
-
-
 @Getter
 @Setter
-
-public class CitiesModel {
+public class CitiesJson {
     private Long istat;
 
     private String comune;
@@ -22,7 +17,7 @@ public class CitiesModel {
     private Double superficie;
 
     private Integer num_residenti;
+    private String regione;
+    private String provincia;
 
-  //  private GeographicalModel geographical;
-  private List<GeographicalEntity> geographical;
 }

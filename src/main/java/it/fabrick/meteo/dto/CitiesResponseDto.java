@@ -16,7 +16,7 @@ public class CitiesResponseDto {
 
     private String comune;
 
-    private Integer prefisso;
+    private String prefisso;
 
     private Integer cod_fisco;
 

@@ -17,7 +17,7 @@ public class CitiesRequestDto {
 
     private Integer prefisso;
 
-    private Integer cod_fisco;
+    private String cod_fisco;
 
     private Double superficie;
 
