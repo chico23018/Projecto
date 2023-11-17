@@ -3,8 +3,6 @@ package it.fabrick.meteo.dto;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.persistence.*;
-
 
 @Getter
 @Setter
@@ -23,9 +21,6 @@ public class CitiesResponseDto {
 
     private Integer num_residenti;
 
-
-    private RegionsResponseDto id_regione;
-    private ProvinciesResponseDto provincia;
-
     private GeographicalResponseDto geographical;
+
 }

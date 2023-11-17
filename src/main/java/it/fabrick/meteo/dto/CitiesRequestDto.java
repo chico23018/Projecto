@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.util.List;
 
 
 @Getter
@@ -22,9 +23,6 @@ public class CitiesRequestDto {
 
     private Integer num_residenti;
 
-
-    private RegionsRequestDto id_regione;
-    private ProvinciesRequestDto provincia;
-
     private GeographicalRequestDto geographical;
+ 
 }

@@ -1,10 +1,9 @@
 package it.fabrick.meteo.model;
 
-import it.fabrick.meteo.dto.GeographicalRequestDto;
-import it.fabrick.meteo.dto.ProvinciesRequestDto;
-import it.fabrick.meteo.dto.RegionsRequestDto;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 
 @Getter
@@ -23,9 +22,6 @@ public class CitiesModel {
 
     private Integer num_residenti;
 
+    private GeographicalModel geographical;
 
-    private RegionsRequestDto id_regione;
-    private ProvinciesRequestDto provincia;
-
-    private GeographicalRequestDto geographical;
 }

@@ -15,5 +15,5 @@ public class GeographicalResponseDto {
 
     private Double lat;
 
-    private String istat;
+
 }

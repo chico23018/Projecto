@@ -22,5 +22,5 @@ public class ProvinciesRequestDto {
     private List<CitiesResponseDto> cities;
 
 
-    private RegionsResponseDto id_regione;
+
 }

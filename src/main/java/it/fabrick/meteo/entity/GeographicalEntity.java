@@ -11,7 +11,8 @@ public class GeographicalEntity {
     @Column(name = "latitude")
     private Double lat;
 
-    @OneToOne
+
     @JoinColumn(name = "istat", referencedColumnName = "istat")
+    @OneToOne
     private CitiesEntity istat;
 }
