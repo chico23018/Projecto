@@ -14,6 +14,7 @@ import java.util.List;
 public class CitiesEntity {
     @Id
     @Column(name = "istat")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long istat;
     @Column(name = "comune")
     private String comune;

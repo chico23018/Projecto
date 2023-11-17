@@ -14,6 +14,7 @@ import java.util.List;
 public class RegionsEntity {
     @Id
     @Column(name = "id_regione")
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id_regione;
     @Column(name = "regione")
     private String regione;

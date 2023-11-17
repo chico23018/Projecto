@@ -24,5 +24,5 @@ public class CitiesRequestDto {
     private Integer num_residenti;
 
     private GeographicalRequestDto geographical;
- 
+
 }

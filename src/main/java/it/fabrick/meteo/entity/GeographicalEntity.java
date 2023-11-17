@@ -5,6 +5,7 @@ import javax.persistence.*;
 @Entity(name = "geographical")
 public class GeographicalEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "longitude")
     private Double lng;
