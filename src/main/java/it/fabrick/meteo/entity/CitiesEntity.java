@@ -26,7 +26,7 @@ public class CitiesEntity {
 
     @ManyToOne
     @JoinColumn(name = "id_regione", referencedColumnName = "id_regione" )
-    private RegionsEntity id_regione;
+    private RegionsEntity regions;
 
     @JoinColumn(name = "sigla", referencedColumnName = "sigla")
     @ManyToOne

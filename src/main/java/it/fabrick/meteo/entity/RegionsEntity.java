@@ -15,7 +15,6 @@ public class RegionsEntity {
     @Id
     @Column(name = "id_regione")
     private Long id_regione;
-
     @Column(name = "regione")
     private String regione;
     @Column(name = "superficie")

@@ -1,6 +1,5 @@
 package it.fabrick.meteo.model;
 
-import it.fabrick.meteo.dto.CitiesResponseDto;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -15,5 +14,5 @@ public class GeographicalModel {
 
     private Double lat;
 
-    private CitiesResponseDto istat;
+    private String istat;
 }
