@@ -9,12 +9,12 @@ import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface IRegionsMapper {
-    RegionsEntity entityFromModel(RegionsModel regionsModel);
+ /*   RegionsEntity entityFromModel(RegionsModel regionsModel);
     RegionsModel modelFromEntity(RegionsEntity regions);
 
     RegionsResponseDto responseFromModel(RegionsModel regionsModel);
     RegionsModel modelFromResponse(RegionsResponseDto regionsResponseDto);
 
     RegionsRequestDto requestFromModel(RegionsModel regionsModel);
-    RegionsModel modelFromRequest(RegionsRequestDto regionsRequestDto);
+    RegionsModel modelFromRequest(RegionsRequestDto regionsRequestDto);*/
 }

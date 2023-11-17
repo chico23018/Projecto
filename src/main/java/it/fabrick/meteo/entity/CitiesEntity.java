@@ -28,15 +28,18 @@ public class CitiesEntity {
     private Integer num_residenti;
 
     @ManyToOne
-    @JoinColumn(name = "id_regione", referencedColumnName = "id_regione" )
+    @JoinColumn(name = "id_regione", referencedColumnName = "id_regione")
     private RegionsEntity regions;
 
-    @JoinColumn(name = "sigla", referencedColumnName = "sigla")
+
     @ManyToOne
+    @JoinColumn(name = "sigla", referencedColumnName = "sigla")
     private ProvinciesEntity provincia;
 
 
-    @OneToOne
-    private GeographicalEntity geographical;
+       @OneToOne
+       private GeographicalEntity geographical;
+/*    @OneToMany
+    private List<GeographicalEntity> geographical;*/
 
 }

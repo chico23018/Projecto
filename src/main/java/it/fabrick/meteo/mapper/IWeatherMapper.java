@@ -15,7 +15,7 @@ public interface IWeatherMapper {
 
     WeatherResponseDto responseFromDto(WeatherDto weatherDto);
 
-    WeatherDto dtoFromResponse(WeatherResponseDto citiesResponseDto);
+    WeatherDto dtoFromResponse(WeatherResponseDto weatherResponseDto);
 
     WeatherRequestDto requestFromDto(WeatherDto weatherDto);
 

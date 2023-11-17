@@ -12,7 +12,7 @@ public interface IDailyMapper {
 
 
     DailyResponseDto responseFromDto(DailyDto dailyDto);
-    DailyDto dtoFromResponse(CitiesResponseDto citiesResponseDto);
+    DailyDto dtoFromResponse(DailyResponseDto responseDto);
 
     DailyRequestDto requestFromDto(DailyDto dailyDto);
     DailyDto dtoFromRequest(DailyRequestDto dailyRequestDto);

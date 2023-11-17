@@ -11,7 +11,6 @@ import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface ICitiesMapper {
-
     CitiesEntity entityFromModel(CitiesModel citiesModel);
 
     CitiesModel modelFromEntity(CitiesEntity cities);
