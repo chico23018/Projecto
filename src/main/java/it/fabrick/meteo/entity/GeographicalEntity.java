@@ -14,6 +14,6 @@ public class GeographicalEntity {
 
 
     @JoinColumn(name = "istat", referencedColumnName = "istat")
-    @OneToOne
+    @ManyToOne
     private CitiesEntity istat;
 }

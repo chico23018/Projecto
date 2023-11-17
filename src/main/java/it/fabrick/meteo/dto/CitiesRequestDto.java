@@ -1,7 +1,10 @@
 package it.fabrick.meteo.dto;
 
+import it.fabrick.meteo.entity.GeographicalEntity;
 import lombok.Getter;
 import lombok.Setter;
+
+import java.util.List;
 
 
 @Getter
@@ -20,8 +23,8 @@ public class CitiesRequestDto {
 
     private Integer num_residenti;
 
-    private GeographicalRequestDto geographical;
-
+  //  private GeographicalRequestDto geographical;
+    private List<GeographicalEntity> geographical;
 
 
 }
