@@ -2,19 +2,23 @@ package it.fabrick.meteo.mapper;
 
 import it.fabrick.meteo.dto.CitiesRequestDto;
 import it.fabrick.meteo.dto.CitiesResponseDto;
+import it.fabrick.meteo.dto.ProvinciesRequestDto;
+import it.fabrick.meteo.dto.ProvinciesResponseDto;
 import it.fabrick.meteo.entity.CitiesEntity;
+import it.fabrick.meteo.entity.ProvinciesEntity;
 import it.fabrick.meteo.model.CitiesModel;
+import it.fabrick.meteo.model.ProvinciesModel;
 import org.mapstruct.Mapper;
 import org.mapstruct.MappingConstants;
 
 @Mapper(componentModel = MappingConstants.ComponentModel.SPRING)
 public interface IProvinciesMapper {
-    CitiesEntity entityFromModel(CitiesModel citiesModel);
-    CitiesModel modelFromEntity(CitiesEntity cities);
+    ProvinciesEntity entityFromModel(ProvinciesModel provinciesModel);
+    ProvinciesModel modelFromEntity(ProvinciesEntity provinciesEntity);
 
-    CitiesResponseDto responseFromModel(CitiesModel citiesModel);
-    CitiesModel modelFromResponse(CitiesResponseDto citiesResponseDto);
+    ProvinciesResponseDto responseFromModel(ProvinciesModel provinciesModel);
+    ProvinciesModel modelFromResponse(ProvinciesResponseDto provinciesResponseDto);
 
-    CitiesRequestDto requestFromModel(CitiesModel citiesModel);
-    CitiesModel modelFromRequest(CitiesRequestDto citiesRequestDto);
+    ProvinciesRequestDto requestFromModel(ProvinciesModel provinciesModel);
+    ProvinciesModel modelFromRequest(ProvinciesRequestDto provinciesRequestDto);
 }
