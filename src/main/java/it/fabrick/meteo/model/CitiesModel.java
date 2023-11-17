@@ -1,11 +1,7 @@
 package it.fabrick.meteo.model;
 
-import it.fabrick.meteo.entity.GeographicalEntity;
 import lombok.Getter;
 import lombok.Setter;
-
-import javax.persistence.OneToMany;
-import java.util.List;
 
 
 @Getter
