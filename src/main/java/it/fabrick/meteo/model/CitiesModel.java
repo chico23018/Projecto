@@ -1,10 +1,7 @@
 package it.fabrick.meteo.model;
 
-import it.fabrick.meteo.entity.GeographicalEntity;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 
 @Getter
@@ -21,8 +18,6 @@ public class CitiesModel {
 
     private Double superficie;
 
-    private Integer num_residenti;
+    private Integer numResident;
 
-    //private GeographicalModel geographical;
-    private List<GeographicalEntity> geographical;
 }

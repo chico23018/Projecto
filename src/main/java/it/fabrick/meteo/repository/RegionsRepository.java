@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface RegionsRepository extends JpaRepository<RegionsEntity,Long> {
-    int deleteById_regione(long id_regione);
+    int deleteByIdRegions(long id_regione);
 }

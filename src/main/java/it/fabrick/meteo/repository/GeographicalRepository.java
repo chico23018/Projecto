@@ -6,5 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface GeographicalRepository extends JpaRepository<GeographicalEntity,Long> {
-    int deleteByIdC(long id);
+    int deleteByIdGeographical(long id);
 }

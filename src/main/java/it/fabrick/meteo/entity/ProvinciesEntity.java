@@ -20,7 +20,7 @@ public class ProvinciesEntity {
     @Column(name = "residenti")
     private Integer residenti;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "provincia")
     private List<CitiesEntity> cities;
 
     @ManyToOne

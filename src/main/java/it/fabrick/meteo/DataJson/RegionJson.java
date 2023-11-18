@@ -1,4 +1,4 @@
-package it.fabrick.meteo;
+package it.fabrick.meteo.DataJson;
 
 import it.fabrick.meteo.entity.CitiesEntity;
 import it.fabrick.meteo.entity.ProvinciesEntity;

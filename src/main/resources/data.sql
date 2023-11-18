@@ -19,7 +19,7 @@ foreign key (id_regione ) references regions (id_regione ) ON DELETE CASCADE ON 
 );
 
 DROP TABLE IF EXISTS CITTA;
-CREATE TABLE CITTA(
+CREATE TABLE CITTA (
 istat INTEGER  PRIMARY KEY,
 comune VARCHAR(70) not null ,
 sigla   VARCHAR(70) not null,

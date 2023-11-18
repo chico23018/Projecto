@@ -6,14 +6,16 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.math.BigDecimal;
 
-@Entity(name = "geographical")
+
 @Getter
 @Setter
+@Entity(name = "geographical")
+
 public class GeographicalEntity {
     @Id
     @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long idGeographical;
     @Column(name = "longitude")
     private BigDecimal lng;
     @Column(name = "latitude")
@@ -21,8 +23,8 @@ public class GeographicalEntity {
 
 
 
-    @ManyToOne
+    @OneToOne
     @JoinColumn(name = "istat", referencedColumnName = "istat")
-    private CitiesEntity istat;
+    private CitiesEntity cities;
 
 }

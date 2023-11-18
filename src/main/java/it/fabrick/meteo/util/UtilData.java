@@ -5,7 +5,6 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import it.fabrick.meteo.DataJson.CitiesJson;
 import it.fabrick.meteo.DataJson.GeograJson;
 import it.fabrick.meteo.DataJson.ProvinJson;
-import it.fabrick.meteo.RegionJson;
 import it.fabrick.meteo.entity.CitiesEntity;
 import it.fabrick.meteo.entity.GeographicalEntity;
 import it.fabrick.meteo.entity.ProvinciesEntity;
@@ -15,6 +14,7 @@ import it.fabrick.meteo.repository.GeographicalRepository;
 import it.fabrick.meteo.repository.ProvinciesRepository;
 import it.fabrick.meteo.repository.RegionsRepository;
 import lombok.AllArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.io.File;
@@ -22,10 +22,10 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Map;
 
 @Service
 @AllArgsConstructor
+@Slf4j
 public class UtilData {
     private final RegionsRepository regionsRepository;
     private final ProvinciesRepository provinciesRepository;
@@ -52,7 +52,7 @@ public class UtilData {
             for (ProvinJson n : lis2) {
                 for (RegionsEntity p : lis) {
 
-                    if (n.getSuperficie() != null & n.getId_regione().equals(p.getId_regione()) & n.getSuperficie() != null) {
+                    if (n.getSuperficie() != null & n.getId_regione().equals(p.getIdRegions()) & n.getSuperficie() != null) {
                         ProvinciesEntity pa = new ProvinciesEntity();
                         pa.setSigla(n.getSigla());
                         pa.setResidenti(n.getResidenti());
@@ -77,7 +77,7 @@ public class UtilData {
                             ci.setRegions(p.getRegions());
                             ci.setComune(c.getComune());
                             ci.setCod_fisco(c.getCod_fisco());
-                            ci.setNum_residenti(c.getNum_residenti());
+                            ci.setNumResident(c.getNum_residenti());
                             citiesEntities.add(ci);
                             citiesRepository.save(ci);
                         }
@@ -91,7 +91,7 @@ public class UtilData {
                             GeographicalEntity geographical = new GeographicalEntity();
                             geographical.setLat(g.getLat());
                             geographical.setLng(g.getLng());
-                            geographical.setIstat(c);
+                            geographical.setCities(c);
                             geographicalRepository.save(geographical);
                         }
                     }
@@ -100,7 +100,7 @@ public class UtilData {
 
 
         } catch (IOException e) {
-            throw new RuntimeException(e);
+           log.error("Error read file json ");
         }
     }
 

@@ -2,7 +2,6 @@ package it.fabrick.meteo.service;
 
 import it.fabrick.meteo.classEnum.ErrorCode;
 import it.fabrick.meteo.entity.GeographicalEntity;
-import it.fabrick.meteo.entity.GeographicalEntity;
 import it.fabrick.meteo.exception.EntityNotFoundException;
 import it.fabrick.meteo.exception.InternalErrorException;
 import it.fabrick.meteo.mapper.IGeographicalMapper;
@@ -63,7 +62,7 @@ public class GeographicalService {
         int howMany = 0;
 
         try {
-            howMany = geographicalRepository.deleteByIdC(id);
+            howMany = geographicalRepository.deleteByIdGeographical(id);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }

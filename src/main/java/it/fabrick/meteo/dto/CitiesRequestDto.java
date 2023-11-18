@@ -21,9 +21,7 @@ public class CitiesRequestDto {
 
     private Double superficie;
 
-    private Integer num_residenti;
+    private Integer numResident;
 
-    //  private GeographicalRequestDto geographical;
-    private List<GeographicalEntity> geographical;
 
 }

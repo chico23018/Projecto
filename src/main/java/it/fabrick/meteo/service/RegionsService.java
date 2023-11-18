@@ -2,11 +2,9 @@ package it.fabrick.meteo.service;
 
 import it.fabrick.meteo.classEnum.ErrorCode;
 import it.fabrick.meteo.entity.RegionsEntity;
-import it.fabrick.meteo.entity.RegionsEntity;
 import it.fabrick.meteo.exception.EntityNotFoundException;
 import it.fabrick.meteo.exception.InternalErrorException;
 import it.fabrick.meteo.mapper.IRegionsMapper;
-import it.fabrick.meteo.model.RegionsModel;
 import it.fabrick.meteo.model.RegionsModel;
 import it.fabrick.meteo.repository.RegionsRepository;
 import it.fabrick.meteo.util.UtilData;
@@ -77,7 +75,7 @@ public class RegionsService {
     public void deleteRegions(long id_regions) {
         int howMany = 0;
         try {
-            howMany = regionsRepository.deleteById_regione(id_regions);
+            howMany = regionsRepository.deleteByIdRegions(id_regions);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }

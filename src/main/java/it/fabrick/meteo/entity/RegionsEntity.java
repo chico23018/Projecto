@@ -1,5 +1,6 @@
 package it.fabrick.meteo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.ToString;
@@ -14,7 +15,8 @@ import java.util.List;
 public class RegionsEntity {
     @Id
     @Column(name = "id_regione")
-    private Long id_regione;
+    @JsonProperty("id_regione")
+    private Long idRegions;
     @Column(name = "regione")
     private String regione;
     @Column(name = "superficie")
@@ -24,9 +26,9 @@ public class RegionsEntity {
     @Column(name = "presidente")
     private String presidente;
 
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "regions")
     private List<CitiesEntity> cities;
-    @OneToMany
+    @OneToMany(fetch = FetchType.EAGER,mappedBy = "regions")
     private List<ProvinciesEntity> provincies;
 
 

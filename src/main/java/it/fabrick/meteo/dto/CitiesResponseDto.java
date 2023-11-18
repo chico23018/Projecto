@@ -18,14 +18,12 @@ public class CitiesResponseDto {
 
     private String prefisso;
 
-    private Integer cod_fisco;
+    private String cod_fisco;
 
     private Double superficie;
 
-    private Integer num_residenti;
+    private Integer numResident;
 
-    //private GeographicalResponseDto geographical;
 
-    private List<GeographicalEntity> geographical;
 
 }

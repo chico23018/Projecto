@@ -11,7 +11,6 @@ import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
-import java.io.IOException;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -20,6 +19,20 @@ import java.util.stream.Collectors;
 public class CitiesService {
     private final CitiesRepository citiesRepository;
     private final ICitiesMapper iCitiesMapper;
+
+    public List<CitiesModel> readGreat(int numResident) {
+        List<CitiesModel> citiesModels;
+        try {
+            citiesModels = citiesRepository.findByNumResidentGreaterThan(numResident)
+                    .stream()
+                    .map(iCitiesMapper::modelFromEntity)
+                    .collect(Collectors.toList());
+        } catch (Exception e) {
+            throw generateGenericInternalError(e);
+        }
+
+        return citiesModels;
+    }
 
     public List<CitiesModel> readCities() {
         return citiesRepository.findAll()
@@ -46,9 +59,9 @@ public class CitiesService {
         try {
             if (citiesModel.getComune() != null && citiesModel.getCod_fisco() != null && citiesModel.getSuperficie() != null
                     && citiesModel.getPrefisso() != null &&
-                    citiesModel.getNum_residenti() != null) {
+                    citiesModel.getNumResident() != null) {
                 howMany = citiesRepository.updateByIstatAndAll(istat, citiesModel.getComune(), citiesModel.getPrefisso()
-                        , citiesModel.getCod_fisco(), citiesModel.getSuperficie(), citiesModel.getNum_residenti()
+                        , citiesModel.getCod_fisco(), citiesModel.getSuperficie(), citiesModel.getNumResident()
                         , regions, provincia);
             } else if (citiesModel.getComune() != null) {
                 howMany = citiesRepository.updateByIstatAndComune(istat, citiesModel.getComune(), regions, provincia);
@@ -58,8 +71,8 @@ public class CitiesService {
                 howMany = citiesRepository.updateByIstatAndSuperficie(istat, citiesModel.getSuperficie(), regions, provincia);
             } else if (citiesModel.getPrefisso() != null) {
                 howMany = citiesRepository.updateByIstatAndPrefisso(istat, citiesModel.getPrefisso(), regions, provincia);
-            } else if (citiesModel.getNum_residenti() != null) {
-                howMany = citiesRepository.updateByIstatAndNum_residenti(istat, citiesModel.getNum_residenti(), regions, provincia);
+            } else if (citiesModel.getNumResident() != null) {
+                howMany = citiesRepository.updateByIstatAndNum_residenti(istat, citiesModel.getNumResident(), regions, provincia);
             }
         } catch (Exception e) {
             throw generateGenericInternalError(e);
