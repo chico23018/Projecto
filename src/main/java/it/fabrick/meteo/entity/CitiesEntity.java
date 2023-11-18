@@ -1,5 +1,6 @@
 package it.fabrick.meteo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -9,7 +10,7 @@ import java.util.List;
 
 @Getter
 @Setter
-@Entity(name = "CITTA")
+@Entity(name = "cities")
 public class CitiesEntity {
     @Id
     @Column(name = "istat")
@@ -38,8 +39,9 @@ public class CitiesEntity {
     private ProvinciesEntity provincia;
 
 
-    /*@OneToMany(mappedBy = "cities")
-    private List<GeographicalEntity> geographical;*/
     @OneToOne(mappedBy = "cities")
     private GeographicalEntity geographical;
+
+    @OneToOne(mappedBy = "cities")
+    private MunicipalityEntity municipalityEntity;
 }

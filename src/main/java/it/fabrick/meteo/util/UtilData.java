@@ -1,18 +1,16 @@
 package it.fabrick.meteo.util;
 
+import com.fasterxml.jackson.core.exc.StreamReadException;
+import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.core.type.TypeReference;
+import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.fabrick.meteo.DataJson.CitiesJson;
 import it.fabrick.meteo.DataJson.GeograJson;
+import it.fabrick.meteo.DataJson.MunicipalityJson;
 import it.fabrick.meteo.DataJson.ProvinJson;
-import it.fabrick.meteo.entity.CitiesEntity;
-import it.fabrick.meteo.entity.GeographicalEntity;
-import it.fabrick.meteo.entity.ProvinciesEntity;
-import it.fabrick.meteo.entity.RegionsEntity;
-import it.fabrick.meteo.repository.CitiesRepository;
-import it.fabrick.meteo.repository.GeographicalRepository;
-import it.fabrick.meteo.repository.ProvinciesRepository;
-import it.fabrick.meteo.repository.RegionsRepository;
+import it.fabrick.meteo.entity.*;
+import it.fabrick.meteo.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -30,10 +28,11 @@ public class UtilData {
     private final RegionsRepository regionsRepository;
     private final ProvinciesRepository provinciesRepository;
     private final CitiesRepository citiesRepository;
-    private final GeographicalRepository  geographicalRepository;
-    private ObjectMapper objectMapper ;
+    private final GeographicalRepository geographicalRepository;
+    private final MunicipalityRepository municipalityRepository;
+    private ObjectMapper objectMapper;
 
-    public void saveDate() {
+  /*  public void saveDate() {
         List<RegionsEntity> lis;
         try {
             lis = objectMapper.readValue(new File("json/italy_regions.json"), new TypeReference<List<RegionsEntity>>() {
@@ -44,7 +43,8 @@ public class UtilData {
             });
             List<ProvinJson> lis2 = objectMapper.readValue(new File("json/italy_provincies.json"), new TypeReference<List<ProvinJson>>() {
             });
-
+            List<MunicipalityJson> lis4 = objectMapper.readValue(new File("json/italy_munic.json"), new TypeReference<List<MunicipalityJson>>() {
+            });
 
             regionsRepository.saveAllAndFlush(lis);
             List<ProvinciesEntity> provinciesEntities = new ArrayList<>();
@@ -97,11 +97,63 @@ public class UtilData {
                     }
                 }
             }
+            for (MunicipalityJson g : lis4) {
+                if (g.getIstat() != null & g.getRegione() != null & g.getProvincia() != null) {
+                    for (CitiesEntity c : citiesEntities) {
+                        if (g.getIstat().equals(c.getIstat())) {
+                            MunicipalityEntity municipalityEntity = new MunicipalityEntity();
+                            municipalityEntity.setMunicipality(g.getComune());
+                            municipalityEntity.setAddress(g.getIndirizzo());
+                            municipalityEntity.setProvincia(g.getProvincia());
+                            municipalityEntity.setRegions(g.getRegione());
+                            municipalityEntity.setCities(c);
+                            municipalityRepository.save(municipalityEntity);
+                        }
+                    }
+                }
+            }
 
 
         } catch (IOException e) {
-           log.error("Error read file json ");
+            log.error("Error read file json ");
         }
-    }
 
-}
+    }*/
+
+ /*   public void createJson() {
+        try
+            {
+            objectMapper.writeValue(new File("json/munic.json"), municipalityRepository.findAll());
+              //objectMapper.writeValue(new File("json/cities.json"), citiesRepository.findAll());
+              objectMapper.writeValue(new File("json/geogra.json"), geographicalRepository.findAll());
+            // objectMapper.writeValue(new File("json/regions.json"), regionsRepository.findAll());
+            objectMapper.writeValue(new File("json/provin.json"),provinciesRepository.findAll());
+            } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }*/
+
+    public void saveData(){
+        try {
+            List<RegionsEntity> lis = objectMapper.readValue(new File("json/regions.json"), new TypeReference<List<RegionsEntity>>() {
+            });
+            List<CitiesEntity> lis1 = objectMapper.readValue(new File("json/cities.json"), new TypeReference<List<CitiesEntity>>() {
+            });
+            List<GeographicalEntity> lis3 = objectMapper.readValue(new File("json/geogra.json"), new TypeReference<List<GeographicalEntity>>() {
+            });
+            List<ProvinciesEntity> lis2 = objectMapper.readValue(new File("json/provin.json"), new TypeReference<List<ProvinciesEntity>>() {
+            });
+            List<MunicipalityEntity> lis4 = objectMapper.readValue(new File("json/munic.json"), new TypeReference<List<MunicipalityEntity>>() {
+            });
+            regionsRepository.saveAllAndFlush(lis);
+            provinciesRepository.saveAllAndFlush(lis2);
+            citiesRepository.saveAllAndFlush(lis1);
+            geographicalRepository.saveAllAndFlush(lis3);
+            municipalityRepository.saveAllAndFlush(lis4);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+
+    }
+    }

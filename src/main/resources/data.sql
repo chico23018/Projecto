@@ -18,8 +18,8 @@ foreign key (id_regione ) references regions (id_regione ) ON DELETE CASCADE ON 
 
 );
 
-DROP TABLE IF EXISTS CITTA;
-CREATE TABLE CITTA (
+DROP TABLE IF EXISTS CITIES;
+CREATE TABLE CITIES (
 istat INTEGER  PRIMARY KEY,
 comune VARCHAR(70) not null ,
 sigla   VARCHAR(70) not null,
@@ -39,5 +39,16 @@ id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
 istat INTEGER not null unique,
 longitude DOUBLE  not null,
 latitude DOUBLE  not null,
-foreign key (istat ) references CITTA (istat ) ON DELETE CASCADE ON UPDATE CASCADE
+foreign key (istat ) references CITIES (istat ) ON DELETE CASCADE ON UPDATE CASCADE
+);
+
+DROP TABLE IF EXISTS  Municipalities;
+CREATE TABLE Municipalities(
+id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
+istat INTEGER not null unique,
+municipality VARCHAR(70) not null,
+regions VARCHAR(70) not null,
+provincia VARCHAR(70) not null,
+address VARCHAR(70) not null,
+foreign key (istat ) references CITIES (istat ) ON DELETE CASCADE ON UPDATE CASCADE
 );

@@ -1,5 +1,6 @@
 package it.fabrick.meteo.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
@@ -28,6 +29,7 @@ public class RegionsEntity {
 
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "regions")
     private List<CitiesEntity> cities;
+
     @OneToMany(fetch = FetchType.EAGER,mappedBy = "regions")
     private List<ProvinciesEntity> provincies;
 

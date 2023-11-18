@@ -20,9 +20,6 @@ public class GeographicalEntity {
     private BigDecimal lng;
     @Column(name = "latitude")
     private BigDecimal lat;
-
-
-
     @OneToOne
     @JoinColumn(name = "istat", referencedColumnName = "istat")
     private CitiesEntity cities;
