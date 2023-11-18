@@ -7,9 +7,11 @@ import it.fabrick.meteo.DataJson.GeograJson;
 import it.fabrick.meteo.DataJson.ProvinJson;
 import it.fabrick.meteo.RegionJson;
 import it.fabrick.meteo.entity.CitiesEntity;
+import it.fabrick.meteo.entity.GeographicalEntity;
 import it.fabrick.meteo.entity.ProvinciesEntity;
 import it.fabrick.meteo.entity.RegionsEntity;
 import it.fabrick.meteo.repository.CitiesRepository;
+import it.fabrick.meteo.repository.GeographicalRepository;
 import it.fabrick.meteo.repository.ProvinciesRepository;
 import it.fabrick.meteo.repository.RegionsRepository;
 import lombok.AllArgsConstructor;
@@ -28,7 +30,8 @@ public class UtilData {
     private final RegionsRepository regionsRepository;
     private final ProvinciesRepository provinciesRepository;
     private final CitiesRepository citiesRepository;
-    private ObjectMapper objectMapper = new ObjectMapper();
+    private final GeographicalRepository  geographicalRepository;
+    private ObjectMapper objectMapper ;
 
     public void saveDate() {
         List<RegionsEntity> lis;
@@ -63,7 +66,7 @@ public class UtilData {
             }
             List<CitiesEntity> citiesEntities = new LinkedList<>();
             for (CitiesJson c : lis1) {
-                if (c.getIstat()!=null&&c.getCod_fisco()!=null) {
+                if (c.getIstat() != null && c.getCod_fisco() != null) {
                     for (ProvinciesEntity p : provinciesEntities) {
                         if (c.getProvincia().equals(p.getSigla())) {
                             CitiesEntity ci = new CitiesEntity();
@@ -79,8 +82,19 @@ public class UtilData {
                             citiesRepository.save(ci);
                         }
                     }
-                }else{
-                    System.out.println(c);
+                }
+            }
+            for (GeograJson g : lis3) {
+                if (g.getIstat() != null & g.getLat() != null & g.getLng() != null) {
+                    for (CitiesEntity c : citiesEntities) {
+                        if (g.getIstat().equals(c.getIstat())) {
+                            GeographicalEntity geographical = new GeographicalEntity();
+                            geographical.setLat(g.getLat());
+                            geographical.setLng(g.getLng());
+                            geographical.setIstat(c);
+                            geographicalRepository.save(geographical);
+                        }
+                    }
                 }
             }
 
