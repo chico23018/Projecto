@@ -20,13 +20,9 @@ public class GeographicalEntity {
     private BigDecimal lat;
 
 
-    @JoinColumn(name = "istat", referencedColumnName = "istat")
-    @ManyToOne
-    private CitiesEntity istat;
-   /* @PrePersist
-    private void generic(){
-        if(id==null){
 
-        }
-    }*/
+    @ManyToOne
+    @JoinColumn(name = "istat", referencedColumnName = "istat")
+    private CitiesEntity istat;
+
 }

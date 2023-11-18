@@ -23,8 +23,7 @@ public class CitiesRequestDto {
 
     private Integer num_residenti;
 
-  //  private GeographicalRequestDto geographical;
+    //  private GeographicalRequestDto geographical;
     private List<GeographicalEntity> geographical;
-
 
 }

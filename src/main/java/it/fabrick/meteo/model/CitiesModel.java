@@ -23,6 +23,6 @@ public class CitiesModel {
 
     private Integer num_residenti;
 
-  //  private GeographicalModel geographical;
-  private List<GeographicalEntity> geographical;
+    //private GeographicalModel geographical;
+    private List<GeographicalEntity> geographical;
 }

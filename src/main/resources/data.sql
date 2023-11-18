@@ -28,6 +28,7 @@ prefisso INTEGER not null,
 cod_fisco VARCHAR(70) not null,
 superficie DECIMAL  not null,
 num_residenti INTEGER not null,
+
 foreign key (sigla ) references PROVINCIA (sigla ) ON DELETE CASCADE ON UPDATE CASCADE,
 foreign key (id_regione ) references regions (id_regione ) ON DELETE CASCADE ON UPDATE CASCADE
 );

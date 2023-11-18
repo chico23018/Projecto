@@ -6,4 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface ProvinciesRepository extends JpaRepository<ProvinciesEntity,String> {
+    int deleteBySigla(String sigla);
 }

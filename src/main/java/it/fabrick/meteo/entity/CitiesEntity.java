@@ -35,9 +35,8 @@ public class CitiesEntity {
     @JoinColumn(name = "sigla", referencedColumnName = "sigla")
     private ProvinciesEntity provincia;
 
-/*
-       @OneToOne
-       private GeographicalEntity geographical;*/
+  /*  @OneToOne(mappedBy = "CITTA")
+    private GeographicalEntity geographical;*/
     @OneToMany
     private List<GeographicalEntity> geographical;
 
