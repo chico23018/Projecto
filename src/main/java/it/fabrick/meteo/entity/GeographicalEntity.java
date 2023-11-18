@@ -4,27 +4,29 @@ import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
+import java.math.BigDecimal;
 
 @Entity(name = "geographical")
 @Getter
 @Setter
 public class GeographicalEntity {
     @Id
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @Column(name = "longitude")
-    private Double lng;
+    private BigDecimal lng;
     @Column(name = "latitude")
-    private Double lat;
+    private BigDecimal lat;
 
 
     @JoinColumn(name = "istat", referencedColumnName = "istat")
     @ManyToOne
     private CitiesEntity istat;
-    @PrePersist
+   /* @PrePersist
     private void generic(){
         if(id==null){
 
         }
-    }
+    }*/
 }

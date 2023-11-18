@@ -3,6 +3,7 @@ package it.fabrick.meteo.dto;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
 
 
 @Getter
@@ -11,9 +12,9 @@ public class GeographicalResponseDto {
 
     private Long id;
 
-    private Double lng;
+    private BigDecimal lng;
 
-    private Double lat;
+    private BigDecimal lat;
 
 
 }
