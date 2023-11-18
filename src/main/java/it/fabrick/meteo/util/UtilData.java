@@ -1,24 +1,17 @@
 package it.fabrick.meteo.util;
 
-import com.fasterxml.jackson.core.exc.StreamReadException;
-import com.fasterxml.jackson.core.exc.StreamWriteException;
 import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.databind.DatabindException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.fabrick.meteo.DataJson.CitiesJson;
-import it.fabrick.meteo.DataJson.GeograJson;
-import it.fabrick.meteo.DataJson.MunicipalityJson;
-import it.fabrick.meteo.DataJson.ProvinJson;
 import it.fabrick.meteo.entity.*;
 import it.fabrick.meteo.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
+import java.io.BufferedWriter;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -134,7 +127,7 @@ public class UtilData {
 
     }*/
 
-    public void saveData(){
+    public void saveData() {
         try {
             List<RegionsEntity> lis = objectMapper.readValue(new File("json/regions.json"), new TypeReference<List<RegionsEntity>>() {
             });
@@ -156,4 +149,8 @@ public class UtilData {
         }
 
     }
-    }
+
+
+
+}
+

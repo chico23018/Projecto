@@ -1,14 +1,12 @@
 package it.fabrick.meteo.controller;
 
+import it.fabrick.meteo.classEnum.Regions;
 import it.fabrick.meteo.dto.CitiesResponseDto;
-import it.fabrick.meteo.mapper.ICitiesMapper;
-import it.fabrick.meteo.mapper.IGeographicalMapper;
-import it.fabrick.meteo.mapper.IProvinciesMapper;
-import it.fabrick.meteo.mapper.IRegionsMapper;
-import it.fabrick.meteo.service.CitiesService;
-import it.fabrick.meteo.service.GeographicalService;
-import it.fabrick.meteo.service.ProvinciesService;
-import it.fabrick.meteo.service.RegionsService;
+import it.fabrick.meteo.dto.MunicipalityResponseDto;
+import it.fabrick.meteo.mapper.*;
+import it.fabrick.meteo.model.MunicipalityModel;
+import it.fabrick.meteo.model.RegionsModel;
+import it.fabrick.meteo.service.*;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -25,12 +23,13 @@ import java.util.stream.Collectors;
 public class MeteoController {
     private final RegionsService regionsService;
     private final CitiesService citiesService;
-    private final GeographicalService geographicalService;
     private final ProvinciesService provinciesService;
-    private final IGeographicalMapper iGeographicalMapper;
+    private final MunicipalityService municipalityService;
     private final ICitiesMapper iCitiesMapper;
     private final IProvinciesMapper iProvinciesMapper;
     private final IRegionsMapper iRegionsMapper;
+    private  final IMunicipalityMapper iMunicipalityMapper;
+
 
     @GetMapping
     public ResponseEntity<List<CitiesResponseDto>> readGreatTha(@RequestParam(name = "resident") int id) {
@@ -39,6 +38,18 @@ public class MeteoController {
                 .map(iCitiesMapper::responseFromModel)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(responseDtos);
+    }
+
+    @GetMapping("/regions")
+    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreat(@RequestParam(name = "regions") Regions regions
+            ,@RequestParam(name = "resident")int resident) {
+      RegionsModel regionsModel= regionsService.readRegion(regions.name());
+      List<MunicipalityModel> municipalityModel= municipalityService.readMunicipalityGreat(resident,regions.name());
+
+        System.out.println(municipalityModel.size());
+        return ResponseEntity.ok(municipalityModel.stream()
+                .map(iMunicipalityMapper::responseFromModel)
+                .collect(Collectors.toList()));
     }
 
 }

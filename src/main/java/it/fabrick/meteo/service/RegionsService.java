@@ -28,6 +28,18 @@ public class RegionsService {
         data.saveData();
     }
 
+    public RegionsModel readRegion(String region) {
+        Optional<RegionsEntity> regionsModel;
+        try {
+            regionsModel =Optional.of(regionsRepository.findByRegione(region));
+        }catch (Exception e){
+            throw generateGenericInternalError(e);
+        }
+
+        return regionsModel.map(iRegionsMapper::modelFromEntity)
+                .orElseThrow(() -> new  EntityNotFoundException(String.format("Region is nor present '%s' ", region),ErrorCode.DATA_NOT_FOUND));
+    }
+
     public List<RegionsModel> readRegions() {
         return regionsRepository.findAll()
                 .stream()
