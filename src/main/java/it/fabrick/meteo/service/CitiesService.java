@@ -5,13 +5,15 @@ import it.fabrick.meteo.entity.CitiesEntity;
 import it.fabrick.meteo.exception.EntityNotFoundException;
 import it.fabrick.meteo.exception.InternalErrorException;
 import it.fabrick.meteo.mapper.ICitiesMapper;
+import it.fabrick.meteo.mapper.IWeatherMapper;
 import it.fabrick.meteo.model.CitiesModel;
 import it.fabrick.meteo.repository.CitiesRepository;
-import it.fabrick.meteo.weartherDto.WeatherDto;
+import it.fabrick.meteo.weartherDto.WeatherResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -21,6 +23,7 @@ public class CitiesService {
     private final CitiesRepository citiesRepository;
     private final ICitiesMapper iCitiesMapper;
     private final WeatherService weatherService;
+    private final IWeatherMapper iWeatherMapper;
 
     public List<CitiesModel> readGreat(int numResident) {
         List<CitiesModel> citiesModels;
@@ -98,9 +101,32 @@ public class CitiesService {
 
     }
 
-    public WeatherDto dto(String municipality) {
+    public WeatherResponseDto readForecastCity(String municipality) {
         CitiesEntity cities = citiesRepository.findByComune(municipality);
-        return weatherService.readForecast(cities.getGeographical().getLat(), cities.getGeographical().getLng());
+        if (cities == null)
+            throw new EntityNotFoundException("No data found for city : " + municipality, ErrorCode.DATA_NOT_FOUND);
+        WeatherResponseDto responseDto = iWeatherMapper.responseFromDto(
+                weatherService.readForecast(
+                        cities.getGeographical().getLat()
+                        , cities.getGeographical().getLng()));
+
+        return responseDto;
+    }
+
+    public List<WeatherResponseDto> readForecastDate(String city, LocalDate start, LocalDate end) {
+        CitiesEntity cities = citiesRepository.findByComune(city);
+        if (cities == null)
+            throw new EntityNotFoundException("No data found for city : " + city, ErrorCode.DATA_NOT_FOUND);
+        List<WeatherResponseDto> responseDtos = weatherService.readForecastDate(
+                        cities.getGeographical().getLat()
+                        , cities.getGeographical().getLng()
+                        , start
+                        , end
+                )
+                .stream()
+                .map(iWeatherMapper::responseFromDto)
+                .collect(Collectors.toList());
+        return responseDtos;
     }
 
     private InternalErrorException generateGenericInternalError(Exception e) {
@@ -111,5 +137,5 @@ public class CitiesService {
         return new EntityNotFoundException("No data found for id " + istat, ErrorCode.DATA_NOT_FOUND);
     }
 
-
 }
+

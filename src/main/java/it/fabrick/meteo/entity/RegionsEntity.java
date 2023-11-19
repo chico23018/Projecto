@@ -45,10 +45,10 @@ public class RegionsEntity {
     @Column(name = "sede")
     private String sede;
 
-    @JsonIgnore
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "regions")
     private List<CitiesEntity> cities;
-    @JsonIgnore
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "regions")
     private List<ProvinciesEntity> provincies;
 
