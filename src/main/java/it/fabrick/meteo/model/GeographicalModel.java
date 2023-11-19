@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 @Setter
 public class GeographicalModel {
 
-    private Long id;
+    private Long idGeographical;
 
     private BigDecimal lng;
 

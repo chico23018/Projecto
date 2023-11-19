@@ -2,6 +2,7 @@ package it.fabrick.meteo.repository;
 
 import it.fabrick.meteo.entity.CitiesEntity;
 
+import it.fabrick.meteo.entity.GeographicalEntity;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -16,6 +17,7 @@ public interface CitiesRepository extends JpaRepository<CitiesEntity, String> {
     CitiesEntity findByComune(String comune);
 
     List<CitiesEntity> findByNumResidentGreaterThan(int resident);
+    CitiesEntity findByProvinciaProvincia(String pronvivia);
 
     @Modifying
     @Query("update cities c set c.comune = :comune," +

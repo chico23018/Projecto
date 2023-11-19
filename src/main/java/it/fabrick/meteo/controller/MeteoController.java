@@ -79,13 +79,25 @@ public class MeteoController {
     }
 
     @GetMapping("/forecastDate")
-    public ResponseEntity<List<WeatherResponseDto>> readForecastDate(@RequestParam(name = "city") String city,
-                                                                     @RequestParam(name = "start") LocalDate start,
-                                                                     @RequestParam(name = "end") LocalDate end
+    public ResponseEntity<WeatherResponseDto> readForecastDate(@RequestParam(name = "city") String city,
+                                                               @RequestParam(name = "start") String start,
+                                                               @RequestParam(name = "end") String end
     ) {
-        citiesService.readForecastDate(city, start, end);
 
-        return ResponseEntity.ok(citiesService.readForecastDate(city, start, end));
+
+        return ResponseEntity.ok(citiesService.readForecastDate(city, LocalDate.parse(start), LocalDate.parse(end)));
+    }
+
+    @GetMapping("/forecastProvincia")
+    public ResponseEntity<String> readForecasProvicia(@RequestParam(name = "provicia") String provicia,
+                                                      @RequestParam(name = "start") String date
+
+    ) {
+
+        String media = citiesService.readForecastProvincia(provicia, LocalDate.parse(date));
+
+
+        return ResponseEntity.ok(media);
     }
 
 }

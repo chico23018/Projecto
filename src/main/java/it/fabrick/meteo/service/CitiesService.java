@@ -2,17 +2,22 @@ package it.fabrick.meteo.service;
 
 import it.fabrick.meteo.classEnum.ErrorCode;
 import it.fabrick.meteo.entity.CitiesEntity;
+import it.fabrick.meteo.entity.GeographicalEntity;
 import it.fabrick.meteo.exception.EntityNotFoundException;
 import it.fabrick.meteo.exception.InternalErrorException;
 import it.fabrick.meteo.mapper.ICitiesMapper;
 import it.fabrick.meteo.mapper.IWeatherMapper;
 import it.fabrick.meteo.model.CitiesModel;
 import it.fabrick.meteo.repository.CitiesRepository;
+import it.fabrick.meteo.repository.GeographicalRepository;
+import it.fabrick.meteo.util.Utility;
+import it.fabrick.meteo.weartherDto.WeatherDto;
 import it.fabrick.meteo.weartherDto.WeatherResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -24,6 +29,7 @@ public class CitiesService {
     private final ICitiesMapper iCitiesMapper;
     private final WeatherService weatherService;
     private final IWeatherMapper iWeatherMapper;
+    private GeographicalRepository geographicalRepository;
 
     public List<CitiesModel> readGreat(int numResident) {
         List<CitiesModel> citiesModels;
@@ -102,7 +108,14 @@ public class CitiesService {
     }
 
     public WeatherResponseDto readForecastCity(String municipality) {
-        CitiesEntity cities = citiesRepository.findByComune(municipality);
+        municipality = Utility.converteString(municipality);
+        CitiesEntity cities;
+        try {
+            cities = citiesRepository.findByComune(municipality);
+        } catch (Exception e) {
+            throw generateGenericInternalError(e);
+        }
+
         if (cities == null)
             throw new EntityNotFoundException("No data found for city : " + municipality, ErrorCode.DATA_NOT_FOUND);
         WeatherResponseDto responseDto = iWeatherMapper.responseFromDto(
@@ -113,21 +126,66 @@ public class CitiesService {
         return responseDto;
     }
 
-    public List<WeatherResponseDto> readForecastDate(String city, LocalDate start, LocalDate end) {
-        CitiesEntity cities = citiesRepository.findByComune(city);
+    public WeatherResponseDto readForecastDate(String city, LocalDate start, LocalDate end) {
+        city = Utility.converteString(city);
+        CitiesEntity cities;
+        try {
+            cities = citiesRepository.findByComune(city);
+        } catch (Exception e) {
+            throw generateGenericInternalError(e);
+        }
+
         if (cities == null)
             throw new EntityNotFoundException("No data found for city : " + city, ErrorCode.DATA_NOT_FOUND);
-        List<WeatherResponseDto> responseDtos = weatherService.readForecastDate(
-                        cities.getGeographical().getLat()
-                        , cities.getGeographical().getLng()
-                        , start
-                        , end
-                )
-                .stream()
-                .map(iWeatherMapper::responseFromDto)
-                .collect(Collectors.toList());
-        return responseDtos;
+
+
+        WeatherDto weatherDto = weatherService.readForecastDate(
+                cities.getGeographical().getLat()
+                , cities.getGeographical().getLng()
+                , start
+                , end
+        );
+
+        return iWeatherMapper.responseFromDto(weatherDto);
     }
+
+    public String readForecastProvincia(String provincia, LocalDate date) {
+        provincia = Utility.converteString(provincia);
+        List<GeographicalEntity> geographicalEntities = null;
+        try {
+
+            geographicalEntities = geographicalRepository.findByCitiesProvinciaProvincia(provincia);
+        } catch (Exception e) {
+            throw generateGenericInternalError(e);
+        }
+        if (geographicalEntities == null || geographicalEntities.isEmpty())
+            throw new EntityNotFoundException("No data found for city : " + provincia, ErrorCode.DATA_NOT_FOUND);
+
+        List<BigDecimal> lat = geographicalEntities.stream()
+                .map(x -> x.getLat())
+                .collect(Collectors.toList());
+        List<BigDecimal> lng = geographicalEntities.stream()
+                .map(x -> x.getLng())
+                .collect(Collectors.toList());
+
+
+        List<WeatherDto> weatherDto = weatherService.readForecastProvince(lat, lng, date);
+
+
+        List<Float> list = weatherDto.stream()
+                .map(iWeatherMapper::responseFromDto)
+                .collect(Collectors.toList())
+                .stream().map(x -> x.getDaily().getTemperature()).findFirst()
+                .get();
+
+        String media = String.valueOf(list.stream()
+                .reduce(Float::sum).get() / list.size());
+
+        String n = String.format("la media delle temperature è '%s' per la provincia di '%s' ", media, provincia);
+
+        return n;
+    }
+
 
     private InternalErrorException generateGenericInternalError(Exception e) {
         return new InternalErrorException("Something went wrong", e, ErrorCode.INTERNAL_ERROR);
