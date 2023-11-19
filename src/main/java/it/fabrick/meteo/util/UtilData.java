@@ -2,6 +2,10 @@ package it.fabrick.meteo.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import it.fabrick.meteo.DataJson.CitiesJson;
+import it.fabrick.meteo.DataJson.GeograJson;
+import it.fabrick.meteo.DataJson.MunicipalityJson;
+import it.fabrick.meteo.DataJson.ProvinJson;
 import it.fabrick.meteo.entity.*;
 import it.fabrick.meteo.repository.*;
 import lombok.AllArgsConstructor;
@@ -12,6 +16,8 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -25,7 +31,7 @@ public class UtilData {
     private final MunicipalityRepository municipalityRepository;
     private ObjectMapper objectMapper;
 
-  /*  public void saveDate() {
+    public void saveDate() {
         List<RegionsEntity> lis;
         try {
             lis = objectMapper.readValue(new File("json/italy_regions.json"), new TypeReference<List<RegionsEntity>>() {
@@ -39,7 +45,7 @@ public class UtilData {
             List<MunicipalityJson> lis4 = objectMapper.readValue(new File("json/italy_munic.json"), new TypeReference<List<MunicipalityJson>>() {
             });
 
-            regionsRepository.saveAllAndFlush(lis);
+            regionsRepository.saveAll(lis);
             List<ProvinciesEntity> provinciesEntities = new ArrayList<>();
 
             for (ProvinJson n : lis2) {
@@ -105,29 +111,29 @@ public class UtilData {
                     }
                 }
             }
-
+            createJson();
 
         } catch (IOException e) {
             log.error("Error read file json ");
         }
 
-    }*/
+    }
 
- /*   public void createJson() {
+    private void createJson() {
         try
             {
-            objectMapper.writeValue(new File("json/munic.json"), municipalityRepository.findAll());
-              //objectMapper.writeValue(new File("json/cities.json"), citiesRepository.findAll());
-              objectMapper.writeValue(new File("json/geogra.json"), geographicalRepository.findAll());
-            // objectMapper.writeValue(new File("json/regions.json"), regionsRepository.findAll());
-            objectMapper.writeValue(new File("json/provin.json"),provinciesRepository.findAll());
+           // objectMapper.writeValue(new File("json/munic.json"), municipalityRepository.findAll());
+             // objectMapper.writeValue(new File("json/cities.json"), citiesRepository.findAll());
+             // objectMapper.writeValue(new File("json/geogra.json"), geographicalRepository.findAll());
+            objectMapper.writeValue(new File("json/regionsAll.json"), regionsRepository.findAll());
+            objectMapper.writeValue(new File("json/provinAll.json"),provinciesRepository.findAll());
             } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-    }*/
+    }
 
-    public void saveData() {
+   /* public void saveData() {
         try {
             List<RegionsEntity> lis = objectMapper.readValue(new File("json/regions.json"), new TypeReference<List<RegionsEntity>>() {
             });
@@ -149,7 +155,7 @@ public class UtilData {
         }
 
     }
-
+*/
 
 
 }

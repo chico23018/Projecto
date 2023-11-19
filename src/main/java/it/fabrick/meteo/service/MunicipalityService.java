@@ -6,6 +6,7 @@ import it.fabrick.meteo.exception.InternalErrorException;
 import it.fabrick.meteo.mapper.IMunicipalityMapper;
 import it.fabrick.meteo.model.MunicipalityModel;
 import it.fabrick.meteo.repository.MunicipalityRepository;
+import it.fabrick.meteo.weartherDto.WeatherDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,7 +20,8 @@ public class MunicipalityService {
     private final IMunicipalityMapper iMunicipalityMapper;
 
 
-    public List<MunicipalityModel> readMunicipalityGreat(int numResident, String regions) {
+
+    public List<MunicipalityModel> readMunicipalityGreatByRegion(int numResident, String regions) {
         List<MunicipalityModel> municipalityModels;
        try {
            municipalityModels = municipalityRepository.findByCitiesRegionsRegioneAndCitiesNumResidentGreaterThan(regions, numResident)
@@ -31,6 +33,19 @@ public class MunicipalityService {
        }
         return municipalityModels;
     }
+    public List<MunicipalityModel> readMunicipalityGreatByProvinvia(int numResident, String provinvia , String sigla) {
+        List<MunicipalityModel> municipalityModels;
+        try {
+            municipalityModels = municipalityRepository.findByCitiesProvinciaProvinciaAndCitiesNumResidentGreaterThan(provinvia, numResident)
+                    .stream()
+                    .map(iMunicipalityMapper::modelFromEntity)
+                    .collect(Collectors.toList());
+        }catch (Exception e){
+            throw generateGenericInternalError(e);
+        }
+        return municipalityModels;
+    }
+
     private InternalErrorException generateGenericInternalError(Exception e) {
         return new InternalErrorException("Something went wrong", e, ErrorCode.INTERNAL_ERROR);
     }

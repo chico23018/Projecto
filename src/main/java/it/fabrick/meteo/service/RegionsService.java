@@ -25,7 +25,7 @@ public class RegionsService {
 
         this.data = data;
         this.iRegionsMapper = iRegionsMapper;
-        data.saveData();
+        data.saveDate();
     }
 
     public RegionsModel readRegion(String region) {
@@ -65,7 +65,7 @@ public class RegionsService {
                     .map(entity -> {
                         Optional.ofNullable(regionsModel.getNum_residenti())
 
-                                .ifPresent(entity::setNum_residenti);
+                                .ifPresent(entity::setNumResidenti);
                         Optional.ofNullable(regionsModel.getSuperficie())
                                 .ifPresent(entity::setSuperficie);
                         Optional.ofNullable(regionsModel.getRegione())

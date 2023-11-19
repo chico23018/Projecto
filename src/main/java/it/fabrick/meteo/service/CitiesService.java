@@ -7,6 +7,7 @@ import it.fabrick.meteo.exception.InternalErrorException;
 import it.fabrick.meteo.mapper.ICitiesMapper;
 import it.fabrick.meteo.model.CitiesModel;
 import it.fabrick.meteo.repository.CitiesRepository;
+import it.fabrick.meteo.weartherDto.WeatherDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -19,6 +20,7 @@ import java.util.stream.Collectors;
 public class CitiesService {
     private final CitiesRepository citiesRepository;
     private final ICitiesMapper iCitiesMapper;
+    private final WeatherService weatherService;
 
     public List<CitiesModel> readGreat(int numResident) {
         List<CitiesModel> citiesModels;
@@ -94,6 +96,11 @@ public class CitiesService {
         if (howMany == 0)
             throw generateEntityNotFound(istat);
 
+    }
+
+    public WeatherDto dto(String municipality) {
+        CitiesEntity cities = citiesRepository.findByComune(municipality);
+        return weatherService.readForecast(cities.getGeographical().getLat(), cities.getGeographical().getLng());
     }
 
     private InternalErrorException generateGenericInternalError(Exception e) {

@@ -13,6 +13,7 @@ import java.util.List;
 public interface CitiesRepository extends JpaRepository<CitiesEntity, String> {
     int deleteByIstat(String istat);
 
+    CitiesEntity findByComune(String comune);
 
     List<CitiesEntity> findByNumResidentGreaterThan(int resident);
 
@@ -30,7 +31,7 @@ public interface CitiesRepository extends JpaRepository<CitiesEntity, String> {
 
     @Modifying
     @Query("update cities c set c.prefisso = :prefisso where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
-    int updateByIstatAndPrefisso(String istat, int prefisso, String regione, String provincia    );
+    int updateByIstatAndPrefisso(String istat, int prefisso, String regione, String provincia);
 
     @Modifying
     @Query("update cities c set c.cod_fisco = :cod_fisco  where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
@@ -38,10 +39,10 @@ public interface CitiesRepository extends JpaRepository<CitiesEntity, String> {
 
     @Modifying
     @Query("update cities c set c.superficie = :superficie where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
-    int updateByIstatAndSuperficie(String istat,double superficie, String regione, String provincia);
+    int updateByIstatAndSuperficie(String istat, double superficie, String regione, String provincia);
 
     @Modifying
     @Query("update cities c set c.numResident = :numResident where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
-    int updateByIstatAndNum_residenti(String istat,  int numResident, String regione, String provincia);
+    int updateByIstatAndNum_residenti(String istat, int numResident, String regione, String provincia);
 
 }

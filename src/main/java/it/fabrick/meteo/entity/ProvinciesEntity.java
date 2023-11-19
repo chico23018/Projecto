@@ -20,14 +20,14 @@ public class ProvinciesEntity {
     private Double superficie;
     @Column(name = "residenti")
     private Integer residenti;
-
-    @OneToMany(fetch = FetchType.EAGER,mappedBy = "provincia")
+    @JsonIgnore
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "provincia")
     private List<CitiesEntity> cities;
 
     @ManyToOne
     @JoinColumn(
             name = "id_regione",
-            referencedColumnName = "id_regione" )
+            referencedColumnName = "id_regione")
 
     private RegionsEntity regions;
 

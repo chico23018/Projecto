@@ -4,7 +4,13 @@ id_regione INTEGER PRIMARY KEY,
 regione VARCHAR(70) not null ,
 superficie  DOUBLE not null,
 num_residenti INTEGER not null,
-presidente VARCHAR(70) not null
+presidente VARCHAR(70) not null,
+cod_istat VARCHAR(70) not null,
+cod_fiscale bigint,
+piva bigint ,
+pec VARCHAR(70) not null,
+sito VARCHAR(70) not null,
+sede VARCHAR(255) not null
 );
 
 DROP TABLE IF EXISTS PROVINCIA;

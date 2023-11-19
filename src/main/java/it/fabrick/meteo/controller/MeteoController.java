@@ -1,12 +1,13 @@
 package it.fabrick.meteo.controller;
 
+import it.fabrick.meteo.classEnum.Provincie;
 import it.fabrick.meteo.classEnum.Regions;
 import it.fabrick.meteo.dto.CitiesResponseDto;
 import it.fabrick.meteo.dto.MunicipalityResponseDto;
 import it.fabrick.meteo.mapper.*;
 import it.fabrick.meteo.model.MunicipalityModel;
-import it.fabrick.meteo.model.RegionsModel;
 import it.fabrick.meteo.service.*;
+import it.fabrick.meteo.weartherDto.WeatherDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,15 +42,33 @@ public class MeteoController {
     }
 
     @GetMapping("/regions")
-    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreat(@RequestParam(name = "regions") Regions regions
+    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreatByRegion(@RequestParam(name = "regions") Regions regions
             ,@RequestParam(name = "resident")int resident) {
-      RegionsModel regionsModel= regionsService.readRegion(regions.name());
-      List<MunicipalityModel> municipalityModel= municipalityService.readMunicipalityGreat(resident,regions.name());
+
+      List<MunicipalityModel> municipalityModel= municipalityService.readMunicipalityGreatByRegion(resident,regions.name());
 
         System.out.println(municipalityModel.size());
         return ResponseEntity.ok(municipalityModel.stream()
                 .map(iMunicipalityMapper::responseFromModel)
                 .collect(Collectors.toList()));
+    }
+    @GetMapping("/provincia")
+    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreatByProvincia(@RequestParam(name = "regions") Provincie provincie
+            ,@RequestParam(name = "resident")int resident) {
+
+        List<MunicipalityModel> municipalityModel= municipalityService.readMunicipalityGreatByProvinvia(resident,provincie.name(),null);
+
+        System.out.println(municipalityModel.size());
+        return ResponseEntity.ok(municipalityModel.stream()
+                .map(iMunicipalityMapper::responseFromModel)
+                .collect(Collectors.toList()));
+    }
+    @GetMapping("/forecast")
+    public ResponseEntity<WeatherDto> readForecast(@RequestParam(name = "forecast") String provincie) {
+
+        citiesService.dto(provincie);
+
+        return ResponseEntity.ok( citiesService.dto(provincie));
     }
 
 }

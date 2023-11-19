@@ -7,4 +7,6 @@ import java.util.List;
 
 public interface MunicipalityRepository extends JpaRepository<MunicipalityEntity,Long> {
     List<MunicipalityEntity> findByCitiesRegionsRegioneAndCitiesNumResidentGreaterThan(String regions, int numResident);
+    List<MunicipalityEntity> findByCitiesProvinciaProvinciaAndCitiesNumResidentGreaterThan(String provincia, int numResident);
+    List<MunicipalityEntity> findByCitiesProvinciaSiglaAndCitiesNumResidentGreaterThan(String sigla, int numResident);
 }
