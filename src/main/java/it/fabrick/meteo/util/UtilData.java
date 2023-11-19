@@ -31,7 +31,7 @@ public class UtilData {
     private final MunicipalityRepository municipalityRepository;
     private ObjectMapper objectMapper;
 
-    public void saveDate() {
+  /*  public void saveDate() {
         List<RegionsEntity> lis;
         try {
             lis = objectMapper.readValue(new File("json/italy_regions.json"), new TypeReference<List<RegionsEntity>>() {
@@ -117,9 +117,9 @@ public class UtilData {
             log.error("Error read file json ");
         }
 
-    }
+    }*/
 
-    private void createJson() {
+   /* private void createJson() {
         try
             {
            // objectMapper.writeValue(new File("json/munic.json"), municipalityRepository.findAll());
@@ -132,16 +132,16 @@ public class UtilData {
         }
 
     }
-
-   /* public void saveData() {
+*/
+    public void saveData() {
         try {
-            List<RegionsEntity> lis = objectMapper.readValue(new File("json/regions.json"), new TypeReference<List<RegionsEntity>>() {
+            List<RegionsEntity> lis = objectMapper.readValue(new File("json/regionsAll.json"), new TypeReference<List<RegionsEntity>>() {
             });
             List<CitiesEntity> lis1 = objectMapper.readValue(new File("json/cities.json"), new TypeReference<List<CitiesEntity>>() {
             });
             List<GeographicalEntity> lis3 = objectMapper.readValue(new File("json/geogra.json"), new TypeReference<List<GeographicalEntity>>() {
             });
-            List<ProvinciesEntity> lis2 = objectMapper.readValue(new File("json/provin.json"), new TypeReference<List<ProvinciesEntity>>() {
+            List<ProvinciesEntity> lis2 = objectMapper.readValue(new File("json/provinAll.json"), new TypeReference<List<ProvinciesEntity>>() {
             });
             List<MunicipalityEntity> lis4 = objectMapper.readValue(new File("json/munic.json"), new TypeReference<List<MunicipalityEntity>>() {
             });
@@ -155,7 +155,6 @@ public class UtilData {
         }
 
     }
-*/
 
 
 }

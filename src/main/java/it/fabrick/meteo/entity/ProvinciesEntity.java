@@ -20,7 +20,7 @@ public class ProvinciesEntity {
     private Double superficie;
     @Column(name = "residenti")
     private Integer residenti;
-    @JsonIgnore
+
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "provincia")
     private List<CitiesEntity> cities;
 

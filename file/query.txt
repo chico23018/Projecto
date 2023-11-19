@@ -1,0 +1,3 @@
+SELECT m.* FROM MUNICIPALITIES m ,CITIES  c, REGIONS r where    r.REGIONE = 'Abruzzo' and c.ID_REGIONE = r.ID_REGIONE and c.NUM_RESIDENTI > 100000 and m.ISTAT = c.ISTAT;
+SELECT m.* FROM MUNICIPALITIES m ,CITIES  c, PROVINCIA  r where    r.PROVINCIA  = 'Brescia' and c.SIGLA  = r.SIGLA  and c.NUM_RESIDENTI > 100000 and m.ISTAT = c.ISTAT;
+SELECT g.* ,c.sigla FROM GEOGRAPHICAL  g ,CITIES  c where  c.SIGLA = 'TO'  and g.ISTAT = c.ISTAT ;

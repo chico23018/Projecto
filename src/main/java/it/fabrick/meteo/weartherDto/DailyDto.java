@@ -10,6 +10,6 @@ import java.util.List;
 public class DailyDto {
     private List<String> time;
     private List<String> temperature_2m_max;
-    private List<String> temperature_2m_min;
+
 
 }
