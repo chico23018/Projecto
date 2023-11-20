@@ -13,40 +13,41 @@ import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
 @SpringBootTest
 @AutoConfigureMockMvc
-public class RestController {
+@TestInstance(TestInstance.Lifecycle.PER_CLASS)
+public class RestControllerTest {
     @Autowired
     MockMvc mockMvc;
     private String path="/v1.0/weather";
 
     @Test
     void shouldReadRegion() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(path+"/regions?regions=lombardia&resident=100000"))
+        mockMvc.perform(MockMvcRequestBuilders.post(path+"/regions?regions=lombardia&resident=100000"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.greaterThan(3)));
     }
     @Test
     void shouldReadRegionBadRequest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(path+"/regions?regions=Ciao&resident=100000"))
+        mockMvc.perform(MockMvcRequestBuilders.post(path+"/regions?regions=Ciao&resident=100000"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
     @Test
     void shouldReadProvinvia() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(path+"/provincia?provincia=milano&resident=1000"))
+        mockMvc.perform(MockMvcRequestBuilders.post(path+"/provincia?provincia=milano&resident=1000"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.greaterThan(3)));
     }
     @Test
     void shouldReadProvinviaBadRequest() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(path+"/provincia?provincia=milan&resident=100000"))
+        mockMvc.perform(MockMvcRequestBuilders.post(path+"/provincia?provincia=milan&resident=100000"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
     @Test
     void shouldReadCity() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.get(path+"/city?resident=1000"))
+        mockMvc.perform(MockMvcRequestBuilders.post(path+"/city?resident=1000"))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.greaterThan(3)));

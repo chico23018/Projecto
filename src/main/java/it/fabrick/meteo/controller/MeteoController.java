@@ -6,10 +6,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import it.fabrick.meteo.classEnum.ErrorCode;
-import it.fabrick.meteo.dto.CitiesResponseDto;
-import it.fabrick.meteo.dto.ErrorResponseDto;
-import it.fabrick.meteo.dto.MunicipalityResponseDto;
-import it.fabrick.meteo.dto.RegionsResponseDto;
+import it.fabrick.meteo.dto.*;
 import it.fabrick.meteo.exception.DataNotValidException;
 import it.fabrick.meteo.mapper.ICitiesMapper;
 import it.fabrick.meteo.mapper.IMunicipalityMapper;
@@ -40,12 +37,45 @@ public class MeteoController {
     private final IProvinciesMapper iProvinciesMapper;
     private final IRegionsMapper iRegionsMapper;
     private final IMunicipalityMapper iMunicipalityMapper;
-
+    @Operation(description = "read regions")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
     @GetMapping
     public ResponseEntity<List<RegionsResponseDto>> readRegions() {
         List<RegionsResponseDto> regionsResponseDtos = regionsService.readRegions()
                 .stream()
                 .map(iRegionsMapper::responseFromModel)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(regionsResponseDtos);
+    }
+    @Operation(description = "read province")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @GetMapping("{regions}/province")
+    public ResponseEntity<List<ProvinciesResponseDto>> readProvince() {
+        List<ProvinciesResponseDto> regionsResponseDtos = provinciesService.readProvincies()
+                .stream()
+                .map(iProvinciesMapper::responseFromModel)
+                .collect(Collectors.toList());
+        return ResponseEntity.ok(regionsResponseDtos);
+    }
+    @Operation(description = "read cities")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @GetMapping("{regions}/province/{province}/cities")
+    public ResponseEntity<List<CitiesResponseDto>> readCities() {
+        List<CitiesResponseDto> regionsResponseDtos = citiesService.readCities()
+                .stream()
+                .map(iCitiesMapper::responseFromModel)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(regionsResponseDtos);
     }
@@ -58,7 +88,7 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @GetMapping("/city")
+    @PostMapping("/city")
     public ResponseEntity<List<CitiesResponseDto>> readGreaterTha(@RequestParam(name = "resident")
 
                                                                   Integer resident) {
@@ -78,10 +108,10 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @GetMapping("/regions")
+    @PostMapping("/regions")
     public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreaterByRegion(@RequestParam(name = "regions") String region
             , @RequestParam(name = "resident") int resident) {
-
+        System.out.println(resident);
         List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreaterByRegion(resident, region);
 
 
@@ -98,7 +128,7 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @GetMapping("/provincia")
+    @PostMapping("/provincia")
     public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreatByProvincia(@RequestParam(name = "provincia") String provincia
             , @RequestParam(name = "resident") int resident) {
 

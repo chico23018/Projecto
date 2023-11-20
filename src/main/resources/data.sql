@@ -1,5 +1,9 @@
-DROP TABLE IF EXISTS regions;
-CREATE TABLE regions(
+DROP TABLE IF EXISTS  Municipalities;
+DROP TABLE IF EXISTS geographical;
+DROP TABLE IF EXISTS CITIES;
+DROP TABLE IF EXISTS PROVINCIA;
+DROP TABLE IF EXISTS REGIONS;
+CREATE TABLE REGIONS(
 id_regione INTEGER PRIMARY KEY,
 regione VARCHAR(70) not null ,
 superficie  DOUBLE not null,
@@ -13,7 +17,7 @@ sito VARCHAR(70) not null,
 sede VARCHAR(255) not null
 );
 
-DROP TABLE IF EXISTS PROVINCIA;
+
 CREATE TABLE PROVINCIA(
 sigla VARCHAR(70) PRIMARY KEY,
 provincia VARCHAR(70) not null ,
@@ -24,7 +28,7 @@ foreign key (id_regione ) references regions (id_regione ) ON DELETE CASCADE ON 
 
 );
 
-DROP TABLE IF EXISTS CITIES;
+
 CREATE TABLE CITIES (
 istat INTEGER  PRIMARY KEY,
 comune VARCHAR(70) not null ,
@@ -39,7 +43,7 @@ foreign key (sigla ) references PROVINCIA (sigla ) ON DELETE CASCADE ON UPDATE C
 foreign key (id_regione ) references regions (id_regione ) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS geographical;
+
 CREATE TABLE geographical(
 id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
 istat INTEGER not null unique,
@@ -48,7 +52,7 @@ latitude DOUBLE  not null,
 foreign key (istat ) references CITIES (istat ) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
-DROP TABLE IF EXISTS  Municipalities;
+
 CREATE TABLE Municipalities(
 id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
 istat INTEGER not null unique,

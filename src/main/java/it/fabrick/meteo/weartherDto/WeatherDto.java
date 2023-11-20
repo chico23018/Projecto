@@ -7,5 +7,6 @@ import lombok.Setter;
 @Setter
 
 public class WeatherDto {
+    private String city;
     private DailyDto daily;
 }

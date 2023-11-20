@@ -20,6 +20,6 @@ public class ProvinciesResponseDto {
     private Integer residenti;
 
 
-    private List<CitiesResponseDto> cities;
+  //  private List<CitiesResponseDto> cities;
 
 }

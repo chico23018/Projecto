@@ -122,11 +122,13 @@ public class CitiesService {
                 weatherService.readForecast(
                         cities.getGeographical().getLat()
                         , cities.getGeographical().getLng()));
+        responseDto.setCity(municipality);
 
         return responseDto;
     }
 
     public WeatherResponseDto readForecastDate(String city, LocalDate date) {
+
         city = Utility.converteString(city);
         CitiesEntity cities;
 
@@ -140,7 +142,7 @@ public class CitiesService {
             throw generateEntityNotFound(city, "City");
         WeatherDto weatherDto;
         if (Utility.date(date)) {
-             weatherDto = weatherService.readForecastDate(
+            weatherDto = weatherService.readForecastDate(
                     cities.getGeographical().getLat()
                     , cities.getGeographical().getLng()
                     , LocalDate.now()
@@ -151,10 +153,10 @@ public class CitiesService {
                     cities.getGeographical().getLat()
                     , cities.getGeographical().getLng()
                     , date
-                    ,  LocalDate.now()
+                    , LocalDate.now()
             );
         }
-
+        weatherDto.setCity(city);
         return iWeatherMapper.responseFromDto(weatherDto);
     }
 
