@@ -134,7 +134,7 @@ public class MeteoController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping("/provincia")
-    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreatByProvincia(@RequestBody RequestNunResidentAndPlace requestNunResidentAndPlace) {
+    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreaterByProvincia(@RequestBody RequestNunResidentAndPlace requestNunResidentAndPlace) {
         validationService.doValidate(requestNunResidentAndPlace);
 
         List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreaterByProvinvia(requestNunResidentAndPlace.getNumResident(), requestNunResidentAndPlace.getPlace());
@@ -154,8 +154,8 @@ public class MeteoController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
 
-    @PostMapping("/forecast")
-    public ResponseEntity<WeatherResponseDto> readForecastCity(@RequestParam(name = "city") String city) {
+    @PostMapping("/forecast/{city}")
+    public ResponseEntity<WeatherResponseDto> readForecastCity(@PathVariable(name = "city") String city) {
 
 
         return ResponseEntity.ok(citiesService.readForecastCity(city));
@@ -171,8 +171,10 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @PostMapping("/forecast/date")
-    public ResponseEntity<WeatherResponseDto> readForecastDate(@RequestBody WeatherDays days) {
+    @PostMapping("/forecast/days")
+    public ResponseEntity<WeatherResponseDto> readForecastDays(@RequestBody
+                                                                   @Schema(description = "days Should not be greater 16 days ")
+                                                                   WeatherDays days) {
         validationService.doValidate(days);
 
         return ResponseEntity.ok(citiesService.readForecastDate(days.getPlace(), days.getDays()));

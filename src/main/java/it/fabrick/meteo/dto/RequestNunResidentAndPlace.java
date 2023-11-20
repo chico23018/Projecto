@@ -16,6 +16,7 @@ public class RequestNunResidentAndPlace {
     @NotNull(message = "Should not be null")
     @NotBlank(message = "Should not be blank")
     private String place;
+    @Schema(description = "number resident")
     @Min(value = 1, message = "Should not be 0")
     private Integer numResident;
 

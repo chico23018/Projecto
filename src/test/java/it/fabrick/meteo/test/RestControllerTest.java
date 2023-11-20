@@ -1,8 +1,11 @@
 package it.fabrick.meteo.test;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.fabrick.meteo.dto.RequestNunResident;
 import it.fabrick.meteo.dto.RequestNunResidentAndPlace;
+import it.fabrick.meteo.weartherDto.WeatherDays;
+import it.fabrick.meteo.weartherDto.WeatherRequestDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -14,6 +17,8 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
+
+import java.time.LocalDate;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -82,23 +87,71 @@ public class RestControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.greaterThan(3)));
     }
 
-       @Test
-       void shouldReadCityBadRequest() throws Exception {
-           RequestNunResident requestNunResident = new RequestNunResident();
-           requestNunResident.setNumResident(0);
-           String content = objectMapper.writeValueAsString(requestNunResident);
-           mockMvc.perform(MockMvcRequestBuilders.post(path + "/city")
-                           .contentType(MediaType.APPLICATION_JSON)
-                           .content(content))
-                   .andDo(MockMvcResultHandlers.print())
-                   .andExpect(MockMvcResultMatchers.status().isBadRequest());
-       }
+    @Test
+    void shouldReadCityBadRequest() throws Exception {
+        RequestNunResident requestNunResident = new RequestNunResident();
+        requestNunResident.setNumResident(0);
+        String content = objectMapper.writeValueAsString(requestNunResident);
+        mockMvc.perform(MockMvcRequestBuilders.post(path + "/city")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+    }
+
+    @Test
+    void shouldReadForecastCity() throws Exception {
+
+        mockMvc.perform(MockMvcRequestBuilders.post(path + "/forecast/brescia"))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.city", Matchers.is("BRESCIA")));
+    }
+
+    @Test
+    void shouldReadForecasProvicia() throws Exception {
+        WeatherRequestDto weatherRequestDto = new WeatherRequestDto();
+        weatherRequestDto.setPlace("milano");
+        weatherRequestDto.setDate(LocalDate.parse("2023-11-10"));
+
+        String content = objectMapper.writeValueAsString(weatherRequestDto);
+        mockMvc.perform(MockMvcRequestBuilders.post(path + "/forecast/provincia")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk());
+    }
+
+    @Test
+    void shouldReadForecastDays() throws Exception {
+
+        WeatherDays days = new WeatherDays();
+        days.setDays(5);
+        days.setPlace("desenzano del garda");
+        String content = objectMapper.writeValueAsString(days);
+        mockMvc.perform(MockMvcRequestBuilders.post(path + "/forecast/days")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(content))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isOk())
+                .andExpect(MockMvcResultMatchers.jsonPath("$.city", Matchers.is("DESENZANO DEL GARDA")));
+               ;
+    }
+
+
     private RequestNunResidentAndPlace create(String place, int numResident) {
         RequestNunResidentAndPlace requestNunResidentAndPlace = new RequestNunResidentAndPlace();
         requestNunResidentAndPlace.setPlace(place);
         requestNunResidentAndPlace.setNumResident(numResident);
 
         return requestNunResidentAndPlace;
+    }
+    private WeatherRequestDto create(String place, LocalDate numResident) {
+        WeatherRequestDto weatherRequestDto = new WeatherRequestDto();
+        weatherRequestDto.setPlace(place);
+        weatherRequestDto.setDate(numResident);
+
+        return weatherRequestDto;
     }
 
 }
