@@ -24,4 +24,5 @@ public class GeographicalEntity {
     @JoinColumn(name = "istat", referencedColumnName = "istat")
     private CitiesEntity cities;
 
+
 }

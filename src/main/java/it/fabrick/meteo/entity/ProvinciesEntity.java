@@ -31,5 +31,9 @@ public class ProvinciesEntity {
 
     private RegionsEntity regions;
 
+    @PrePersist
+    private void upperCase() {
+       provincia= provincia.toUpperCase();
+    }
 
 }

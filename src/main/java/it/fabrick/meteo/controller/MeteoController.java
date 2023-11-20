@@ -52,7 +52,7 @@ public class MeteoController {
 
         List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreatByRegion(resident, region);
 
-        System.out.println(municipalityModel.size());
+
         return ResponseEntity.ok(municipalityModel.stream()
                 .map(iMunicipalityMapper::responseFromModel)
                 .collect(Collectors.toList()));
@@ -64,7 +64,7 @@ public class MeteoController {
 
         List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreatByProvinvia(resident, provincia, null);
 
-        System.out.println(municipalityModel.size());
+
         return ResponseEntity.ok(municipalityModel.stream()
                 .map(iMunicipalityMapper::responseFromModel)
                 .collect(Collectors.toList()));

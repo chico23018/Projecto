@@ -90,7 +90,7 @@ public class CitiesService {
         }
 
         if (howMany == 0)
-            throw generateEntityNotFound(istat);
+            throw generateEntityNotFound(istat,"id");
 
         return citiesRepository.findById(istat).map(iCitiesMapper::modelFromEntity).get();
     }
@@ -103,7 +103,7 @@ public class CitiesService {
             throw generateGenericInternalError(e);
         }
         if (howMany == 0)
-            throw generateEntityNotFound(istat);
+            throw generateEntityNotFound(istat,"id");
 
     }
 
@@ -191,8 +191,8 @@ public class CitiesService {
         return new InternalErrorException("Something went wrong", e, ErrorCode.INTERNAL_ERROR);
     }
 
-    private EntityNotFoundException generateEntityNotFound(String istat) {
-        return new EntityNotFoundException("No data found for id " + istat, ErrorCode.DATA_NOT_FOUND);
+    private EntityNotFoundException generateEntityNotFound(String istat , String st) {
+        return new EntityNotFoundException("No data found for "+st+" :"+ istat, ErrorCode.DATA_NOT_FOUND);
     }
 
 }

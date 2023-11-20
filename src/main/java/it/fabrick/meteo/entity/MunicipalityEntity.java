@@ -24,4 +24,9 @@ public class MunicipalityEntity {
     private String provincia;
     @Column(name = "address")
     private String address;
+
+    @PrePersist
+    private void upperCase() {
+     municipality=   municipality.toUpperCase();
+    }
 }
