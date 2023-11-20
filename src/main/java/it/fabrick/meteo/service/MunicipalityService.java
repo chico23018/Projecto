@@ -36,7 +36,7 @@ public class MunicipalityService {
         return municipalityModels;
     }
 
-    public List<MunicipalityModel> readMunicipalityGreaterByProvinvia(int numResident, String provinvia, String sigla) {
+    public List<MunicipalityModel> readMunicipalityGreaterByProvinvia(int numResident, String provinvia) {
         provinvia = Utility.converteString(provinvia);
         List<MunicipalityModel> municipalityModels;
         try {

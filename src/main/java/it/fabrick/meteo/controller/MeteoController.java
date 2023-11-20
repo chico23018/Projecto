@@ -5,22 +5,20 @@ import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import io.swagger.v3.oas.annotations.responses.ApiResponses;
-import it.fabrick.meteo.classEnum.ErrorCode;
 import it.fabrick.meteo.dto.*;
-import it.fabrick.meteo.exception.DataNotValidException;
 import it.fabrick.meteo.mapper.ICitiesMapper;
 import it.fabrick.meteo.mapper.IMunicipalityMapper;
 import it.fabrick.meteo.mapper.IProvinciesMapper;
 import it.fabrick.meteo.mapper.IRegionsMapper;
 import it.fabrick.meteo.model.MunicipalityModel;
 import it.fabrick.meteo.service.*;
+import it.fabrick.meteo.weartherDto.WeatherDays;
 import it.fabrick.meteo.weartherDto.WeatherRequestDto;
 import it.fabrick.meteo.weartherDto.WeatherResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -37,9 +35,12 @@ public class MeteoController {
     private final IProvinciesMapper iProvinciesMapper;
     private final IRegionsMapper iRegionsMapper;
     private final IMunicipalityMapper iMunicipalityMapper;
+
     @Operation(description = "read regions")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
@@ -51,29 +52,36 @@ public class MeteoController {
                 .collect(Collectors.toList());
         return ResponseEntity.ok(regionsResponseDtos);
     }
+
     @Operation(description = "read province")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @GetMapping("{regions}/province")
-    public ResponseEntity<List<ProvinciesResponseDto>> readProvince() {
-        List<ProvinciesResponseDto> regionsResponseDtos = provinciesService.readProvincies()
+    @GetMapping("/{regions}/province")
+    public ResponseEntity<List<ProvinciesResponseDto>> readProvince(@PathVariable("regions") String region) {
+        List<ProvinciesResponseDto> regionsResponseDtos = provinciesService.readProvincies(region)
                 .stream()
                 .map(iProvinciesMapper::responseFromModel)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(regionsResponseDtos);
     }
+
     @Operation(description = "read cities")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND",
+                    content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @GetMapping("{regions}/province/{province}/cities")
-    public ResponseEntity<List<CitiesResponseDto>> readCities() {
-        List<CitiesResponseDto> regionsResponseDtos = citiesService.readCities()
+    @GetMapping("/{region}/province/{province}/cities")
+    public ResponseEntity<List<CitiesResponseDto>> readCities(@PathVariable("region") String region,
+                                                              @PathVariable("province") String province) {
+        List<CitiesResponseDto> regionsResponseDtos = citiesService.readCities(region, province)
                 .stream()
                 .map(iCitiesMapper::responseFromModel)
                 .collect(Collectors.toList());
@@ -89,11 +97,9 @@ public class MeteoController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping("/city")
-    public ResponseEntity<List<CitiesResponseDto>> readGreaterTha(@RequestParam(name = "resident")
-
-                                                                  Integer resident) {
-        validationService.doValidate(resident);
-        List<CitiesResponseDto> responseDtos = citiesService.readGreater(resident)
+    public ResponseEntity<List<CitiesResponseDto>> readGreaterTha(@RequestBody RequestNunResident requestNunResident) {
+        validationService.doValidate(requestNunResident);
+        List<CitiesResponseDto> responseDtos = citiesService.readGreater(requestNunResident.getNumResident())
                 .stream()
                 .map(iCitiesMapper::responseFromModel)
                 .collect(Collectors.toList());
@@ -109,10 +115,9 @@ public class MeteoController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping("/regions")
-    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreaterByRegion(@RequestParam(name = "regions") String region
-            , @RequestParam(name = "resident") int resident) {
-        System.out.println(resident);
-        List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreaterByRegion(resident, region);
+    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreaterByRegion(@RequestBody RequestNunResidentAndPlace requestNunResidentAndPlace) {
+        validationService.doValidate(requestNunResidentAndPlace);
+        List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreaterByRegion(requestNunResidentAndPlace.getNumResident(), requestNunResidentAndPlace.getPlace());
 
 
         return ResponseEntity.ok(municipalityModel.stream()
@@ -129,10 +134,10 @@ public class MeteoController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping("/provincia")
-    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreatByProvincia(@RequestParam(name = "provincia") String provincia
-            , @RequestParam(name = "resident") int resident) {
+    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreatByProvincia(@RequestBody RequestNunResidentAndPlace requestNunResidentAndPlace) {
+        validationService.doValidate(requestNunResidentAndPlace);
 
-        List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreaterByProvinvia(resident, provincia, null);
+        List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreaterByProvinvia(requestNunResidentAndPlace.getNumResident(), requestNunResidentAndPlace.getPlace());
 
 
         return ResponseEntity.ok(municipalityModel.stream()
@@ -167,10 +172,10 @@ public class MeteoController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping("/forecast/date")
-    public ResponseEntity<WeatherResponseDto> readForecastDate(@RequestBody WeatherRequestDto weatherRequestDto) {
-        validationService.doValidate(weatherRequestDto);
+    public ResponseEntity<WeatherResponseDto> readForecastDate(@RequestBody WeatherDays days) {
+        validationService.doValidate(days);
 
-        return ResponseEntity.ok(citiesService.readForecastDate(weatherRequestDto.getPlace(), weatherRequestDto.getDate()));
+        return ResponseEntity.ok(citiesService.readForecastDate(days.getPlace(), days.getDays()));
     }
 
     @Operation(description = "read weather forecast for provincia and date")

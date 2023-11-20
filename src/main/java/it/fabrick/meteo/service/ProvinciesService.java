@@ -2,13 +2,12 @@ package it.fabrick.meteo.service;
 
 import it.fabrick.meteo.classEnum.ErrorCode;
 import it.fabrick.meteo.entity.ProvinciesEntity;
-import it.fabrick.meteo.entity.ProvinciesEntity;
 import it.fabrick.meteo.exception.EntityNotFoundException;
 import it.fabrick.meteo.exception.InternalErrorException;
 import it.fabrick.meteo.mapper.IProvinciesMapper;
 import it.fabrick.meteo.model.ProvinciesModel;
-import it.fabrick.meteo.model.ProvinciesModel;
 import it.fabrick.meteo.repository.ProvinciesRepository;
+import it.fabrick.meteo.util.Utility;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -22,8 +21,19 @@ public class ProvinciesService {
     private final ProvinciesRepository provinciesRepository;
     private final IProvinciesMapper iProvinciesMapper;
 
-    public List<ProvinciesModel> readProvincies() {
-        return provinciesRepository.findAll()
+    public List<ProvinciesModel> readProvincies(String region) {
+        region = Utility.converteString(region);
+        List<ProvinciesEntity> provinciesEntities;
+        try {
+            provinciesEntities = provinciesRepository.findByRegionsRegione(region);
+        } catch (Exception e) {
+            throw generateGenericInternalError(e);
+        }
+        if(provinciesEntities.isEmpty())
+            throw generateEntityNotFound(region , "Region");
+
+
+        return provinciesEntities
                 .stream()
                 .map(iProvinciesMapper::modelFromEntity)
                 .collect(Collectors.toList());
@@ -58,7 +68,7 @@ public class ProvinciesService {
         }
         return reservationEntity
                 .map(iProvinciesMapper::modelFromEntity)
-                .orElseThrow(() -> generateEntityNotFound(sigla));
+                .orElseThrow(() -> generateEntityNotFound(sigla, "sigla"));
 
     }
 
@@ -71,7 +81,7 @@ public class ProvinciesService {
             throw generateGenericInternalError(e);
         }
         if (howMany == 0)
-            throw generateEntityNotFound(sigla);
+            throw generateEntityNotFound(sigla, "provincia");
 
     }
 
@@ -79,7 +89,7 @@ public class ProvinciesService {
         return new InternalErrorException("Something went wrong", e, ErrorCode.INTERNAL_ERROR);
     }
 
-    private EntityNotFoundException generateEntityNotFound(String id) {
-        return new EntityNotFoundException("No data found for id " + id, ErrorCode.DATA_NOT_FOUND);
+    private EntityNotFoundException generateEntityNotFound(String provincia, String pro) {
+        return new EntityNotFoundException("No data found for "+pro+": " + provincia, ErrorCode.DATA_NOT_FOUND);
     }
 }

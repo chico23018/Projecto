@@ -16,17 +16,9 @@ public class DailyResponseDto {
     private Float mediaTemperature;
 
     public List<Float> getTemperature() {
-        mediaTempera();
+
         return temperature;
     }
 
-    private void mediaTempera() {
-    if(temperature.size()>1){
 
-
-      mediaTemperature=  temperature.stream()
-              .reduce(Float::sum).get()/ temperature.size()
-        ;
-    }
-    }
 }

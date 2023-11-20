@@ -45,8 +45,18 @@ public class CitiesService {
         return citiesModels;
     }
 
-    public List<CitiesModel> readCities() {
-        return citiesRepository.findAll()
+    public List<CitiesModel> readCities(String region, String provincia) {
+        region = Utility.converteString(region);
+        provincia = Utility.converteString(provincia);
+        List<CitiesEntity> citiesEntities = null;
+        try{
+            citiesEntities = citiesRepository.findByRegionsRegioneAndProvinciaProvincia(region, provincia);
+        }catch (Exception e){
+            generateGenericInternalError(e);
+        }
+       if(citiesEntities!=null&&citiesEntities.isEmpty())
+           throw generateEntityNotFound(region+" and "+provincia, "Region and Province");
+        return citiesEntities
                 .stream()
                 .map(iCitiesMapper::modelFromEntity)
                 .collect(Collectors.toList());
@@ -127,7 +137,7 @@ public class CitiesService {
         return responseDto;
     }
 
-    public WeatherResponseDto readForecastDate(String city, LocalDate date) {
+    public WeatherResponseDto readForecastDate(String city, int days) {
 
         city = Utility.converteString(city);
         CitiesEntity cities;
@@ -141,23 +151,15 @@ public class CitiesService {
         if (cities == null)
             throw generateEntityNotFound(city, "City");
         WeatherDto weatherDto;
-        if (Utility.date(date)) {
-            weatherDto = weatherService.readForecastDate(
-                    cities.getGeographical().getLat()
-                    , cities.getGeographical().getLng()
-                    , LocalDate.now()
-                    , date
-            );
-        } else {
-            weatherDto = weatherService.readForecastDate(
-                    cities.getGeographical().getLat()
-                    , cities.getGeographical().getLng()
-                    , date
-                    , LocalDate.now()
-            );
-        }
-        weatherDto.setCity(city);
-        return iWeatherMapper.responseFromDto(weatherDto);
+        weatherDto = weatherService.readForecastDate(
+                cities.getGeographical().getLat()
+                , cities.getGeographical().getLng()
+                , days
+        );
+        WeatherResponseDto responseDto = iWeatherMapper.responseFromDto(weatherDto);
+        responseDto.setCity(city);
+        responseDto.getDaily().setMediaTemperature(Utility.mediaTempera(responseDto.getDaily().getTemperature()));
+        return responseDto;
     }
 
     public String readForecastProvincia(String provincia, LocalDate date) {

@@ -1,9 +1,7 @@
 package it.fabrick.meteo.service;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.fabrick.meteo.classEnum.ErrorCode;
-import it.fabrick.meteo.dto.ErrorResponseDto;
 import it.fabrick.meteo.exception.InternalErrorException;
 import it.fabrick.meteo.util.Utility;
 import it.fabrick.meteo.weartherDto.WeatherDto;
@@ -31,9 +29,10 @@ public class WeatherService {
     private final String latitude = "latitude";
     private final String longitude = "longitude";
     private final String daily = "daily=temperature_2m_max";
-    private final String forecast_days = "forecast_days=1";
+    private final String forecast_days = "forecast_days";
     private final String start_date = "start_date";
     private final String end_date = "end_date";
+
     private final RestTemplate template;
     private final ObjectMapper objectMapper;
 
@@ -62,13 +61,35 @@ public class WeatherService {
         return weatherDto;
     }
 
-    public WeatherDto readForecastDate(BigDecimal latitude, BigDecimal longitude, LocalDate start, LocalDate end) {
+    public WeatherDto readForecastDate(BigDecimal latitude, BigDecimal longitude, int days) {
         WeatherDto weatherDto = null;
 
         UriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(weatherUrl);
         URI uri1 = uriBuilderFactory.builder().queryParam(this.latitude, latitude)
                 .queryParam(this.longitude, longitude)
                 .query(daily)
+                .queryParam(forecast_days, days)
+                .build();
+
+        HttpEntity<WeatherDto> httpEntity = new HttpEntity<>(null);
+        try {
+            weatherDto = template.exchange(uri1,
+                    HttpMethod.GET, httpEntity, WeatherDto.class).getBody();
+        } catch (
+                RestClientResponseException e) {
+            throw generateGenericInternalError(e);
+        }
+
+
+        return weatherDto;
+    }
+  /*  public WeatherDto readForecastDate(BigDecimal latitude, BigDecimal longitude, LocalDate start, LocalDate end) {
+        WeatherDto weatherDto = null;
+
+        UriBuilderFactory uriBuilderFactory = new DefaultUriBuilderFactory(weatherUrl);
+        URI uri1 = uriBuilderFactory.builder().queryParam(this.latitude, latitude)
+                .queryParam(this.longitude, longitude)
+                .queryParam(daily)
                 .queryParam(this.start_date, start)
                 .queryParam(this.end_date, end)
                 .build();
@@ -84,7 +105,7 @@ public class WeatherService {
 
 
         return weatherDto;
-    }
+    }*/
 
     public List<WeatherDto> readForecastProvince(List<BigDecimal> latitude, List<BigDecimal> longitude, LocalDate start) {
 
