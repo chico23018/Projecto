@@ -10,8 +10,6 @@ import java.math.BigDecimal;
 @Setter
 public class GeographicalRequestDto {
 
-    private Long id;
-
     private BigDecimal lng;
 
     private BigDecimal lat;

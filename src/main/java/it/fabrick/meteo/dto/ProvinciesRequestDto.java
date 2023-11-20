@@ -19,8 +19,6 @@ public class ProvinciesRequestDto {
     private Integer residenti;
 
 
-    private List<CitiesResponseDto> cities;
-
 
 
 }

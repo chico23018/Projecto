@@ -1,5 +1,6 @@
 package it.fabrick.meteo.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,7 +21,8 @@ public class CitiesEntity {
     private Integer prefisso;
 
     @Column(name = "cod_fisco")
-    private String cod_fisco;
+    @JsonProperty("cod_fisco")
+    private String codFisco;
 
     @Column(name = "superficie")
     private Double superficie;

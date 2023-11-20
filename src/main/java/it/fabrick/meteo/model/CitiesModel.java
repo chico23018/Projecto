@@ -14,7 +14,7 @@ public class CitiesModel {
 
     private Integer prefisso;
 
-    private String cod_fisco;
+    private String codFisco;
 
     private Double superficie;
 

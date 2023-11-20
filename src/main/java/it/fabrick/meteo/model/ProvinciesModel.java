@@ -1,5 +1,6 @@
 package it.fabrick.meteo.model;
 
+import it.fabrick.meteo.entity.RegionsEntity;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -20,6 +21,8 @@ public class ProvinciesModel {
 
 
     private List<CitiesModel> cities;
+
+
 
 
 }

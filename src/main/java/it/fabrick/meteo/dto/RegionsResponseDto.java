@@ -1,5 +1,6 @@
 package it.fabrick.meteo.dto;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Getter;
 import lombok.Setter;
 
@@ -11,19 +12,17 @@ import java.util.List;
 @Setter
 
 public class RegionsResponseDto {
-    private Long id_regione;
-
-
+    private Long idRegions;
     private String regione;
-
     private Double superficie;
-
-    private Integer num_residenti;
-
+    private Integer numResidenti;
     private String presidente;
+    private String codIstat;
+    private Long codFiscale;
+    private Long piva;
+    private String pec;
+    private String sito;
+    private String sede;
 
 
-    private List<CitiesResponseDto> cities;
-
-    private List<ProvinciesResponseDto> provincies;
 }

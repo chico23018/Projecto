@@ -1,9 +1,5 @@
 package it.fabrick.meteo.mapper;
 
-import it.fabrick.meteo.dto.CitiesRequestDto;
-import it.fabrick.meteo.dto.CitiesResponseDto;
-import it.fabrick.meteo.entity.CitiesEntity;
-import it.fabrick.meteo.model.CitiesModel;
 import it.fabrick.meteo.weartherDto.WeatherDto;
 import it.fabrick.meteo.weartherDto.WeatherRequestDto;
 import it.fabrick.meteo.weartherDto.WeatherResponseDto;

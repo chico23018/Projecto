@@ -20,7 +20,7 @@ public class MunicipalityService {
     private final IMunicipalityMapper iMunicipalityMapper;
 
 
-    public List<MunicipalityModel> readMunicipalityGreatByRegion(int numResident, String regions) {
+    public List<MunicipalityModel> readMunicipalityGreaterByRegion(int numResident, String regions) {
         regions = Utility.converteString(regions);
         List<MunicipalityModel> municipalityModels;
         try {
@@ -36,7 +36,7 @@ public class MunicipalityService {
         return municipalityModels;
     }
 
-    public List<MunicipalityModel> readMunicipalityGreatByProvinvia(int numResident, String provinvia, String sigla) {
+    public List<MunicipalityModel> readMunicipalityGreaterByProvinvia(int numResident, String provinvia, String sigla) {
         provinvia = Utility.converteString(provinvia);
         List<MunicipalityModel> municipalityModels;
         try {

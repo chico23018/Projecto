@@ -11,13 +11,11 @@ import java.util.List;
 @Setter
 
 public class CitiesRequestDto {
-    private Long istat;
-
     private String comune;
 
     private Integer prefisso;
 
-    private String cod_fisco;
+    private String codFisco;
 
     private Double superficie;
 

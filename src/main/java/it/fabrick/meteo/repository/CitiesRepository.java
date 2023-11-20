@@ -21,7 +21,7 @@ public interface CitiesRepository extends JpaRepository<CitiesEntity, String> {
 
     @Modifying
     @Query("update cities c set c.comune = :comune," +
-            "c.prefisso = :prefisso,c.cod_fisco = :cod_fisco,c.superficie = :superficie," +
+            "c.prefisso = :prefisso,c.codFisco = :cod_fisco,c.superficie = :superficie," +
             "c.numResident = :numResident where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
     int updateByIstatAndAll(String istat, String comune, int prefisso
             , String cod_fisco, double superficie, int numResident
@@ -36,8 +36,8 @@ public interface CitiesRepository extends JpaRepository<CitiesEntity, String> {
     int updateByIstatAndPrefisso(String istat, int prefisso, String regione, String provincia);
 
     @Modifying
-    @Query("update cities c set c.cod_fisco = :cod_fisco  where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
-    int updateByIstatAndCod_fisco(String istat, String cod_fisco, String regione, String provincia);
+    @Query("update cities c set c.codFisco = :cod_fisco  where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
+    int updateByIstatAndCodFisco(String istat, String cod_fisco, String regione, String provincia);
 
     @Modifying
     @Query("update cities c set c.superficie = :superficie where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")

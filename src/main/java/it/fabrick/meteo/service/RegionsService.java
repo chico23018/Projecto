@@ -63,7 +63,7 @@ public class RegionsService {
         try {
             reservationEntity = regionsRepository.findById(id_regions)
                     .map(entity -> {
-                        Optional.ofNullable(regionsModel.getNum_residenti())
+                        Optional.ofNullable(regionsModel.getNumResidenti())
 
                                 .ifPresent(entity::setNumResidenti);
                         Optional.ofNullable(regionsModel.getSuperficie())

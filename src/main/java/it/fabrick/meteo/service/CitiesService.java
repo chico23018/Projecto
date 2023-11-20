@@ -31,7 +31,7 @@ public class CitiesService {
     private final IWeatherMapper iWeatherMapper;
     private GeographicalRepository geographicalRepository;
 
-    public List<CitiesModel> readGreat(int numResident) {
+    public List<CitiesModel> readGreater(int numResident) {
         List<CitiesModel> citiesModels;
         try {
             citiesModels = citiesRepository.findByNumResidentGreaterThan(numResident)
@@ -68,16 +68,16 @@ public class CitiesService {
 
         int howMany = 0;
         try {
-            if (citiesModel.getComune() != null && citiesModel.getCod_fisco() != null && citiesModel.getSuperficie() != null
+            if (citiesModel.getComune() != null && citiesModel.getCodFisco() != null && citiesModel.getSuperficie() != null
                     && citiesModel.getPrefisso() != null &&
                     citiesModel.getNumResident() != null) {
                 howMany = citiesRepository.updateByIstatAndAll(istat, citiesModel.getComune(), citiesModel.getPrefisso()
-                        , citiesModel.getCod_fisco(), citiesModel.getSuperficie(), citiesModel.getNumResident()
+                        , citiesModel.getCodFisco(), citiesModel.getSuperficie(), citiesModel.getNumResident()
                         , regions, provincia);
             } else if (citiesModel.getComune() != null) {
                 howMany = citiesRepository.updateByIstatAndComune(istat, citiesModel.getComune(), regions, provincia);
-            } else if (citiesModel.getCod_fisco() != null) {
-                howMany = citiesRepository.updateByIstatAndCod_fisco(istat, citiesModel.getCod_fisco(), regions, provincia);
+            } else if (citiesModel.getCodFisco() != null) {
+                howMany = citiesRepository.updateByIstatAndCodFisco(istat, citiesModel.getCodFisco(), regions, provincia);
             } else if (citiesModel.getSuperficie() != null) {
                 howMany = citiesRepository.updateByIstatAndSuperficie(istat, citiesModel.getSuperficie(), regions, provincia);
             } else if (citiesModel.getPrefisso() != null) {
@@ -90,7 +90,7 @@ public class CitiesService {
         }
 
         if (howMany == 0)
-            throw generateEntityNotFound(istat,"id");
+            throw generateEntityNotFound(istat, "id");
 
         return citiesRepository.findById(istat).map(iCitiesMapper::modelFromEntity).get();
     }
@@ -103,7 +103,7 @@ public class CitiesService {
             throw generateGenericInternalError(e);
         }
         if (howMany == 0)
-            throw generateEntityNotFound(istat,"id");
+            throw generateEntityNotFound(istat, "id");
 
     }
 
@@ -117,7 +117,7 @@ public class CitiesService {
         }
 
         if (cities == null)
-            throw generateEntityNotFound(municipality,"City");
+            throw generateEntityNotFound(municipality, "City");
         WeatherResponseDto responseDto = iWeatherMapper.responseFromDto(
                 weatherService.readForecast(
                         cities.getGeographical().getLat()
@@ -126,9 +126,10 @@ public class CitiesService {
         return responseDto;
     }
 
-    public WeatherResponseDto readForecastDate(String city, LocalDate start, LocalDate end) {
+    public WeatherResponseDto readForecastDate(String city, LocalDate date) {
         city = Utility.converteString(city);
         CitiesEntity cities;
+
         try {
             cities = citiesRepository.findByComune(city);
         } catch (Exception e) {
@@ -136,15 +137,23 @@ public class CitiesService {
         }
 
         if (cities == null)
-            throw generateEntityNotFound(city,"City");
-
-
-        WeatherDto weatherDto = weatherService.readForecastDate(
-                cities.getGeographical().getLat()
-                , cities.getGeographical().getLng()
-                , start
-                , end
-        );
+            throw generateEntityNotFound(city, "City");
+        WeatherDto weatherDto;
+        if (Utility.date(date)) {
+             weatherDto = weatherService.readForecastDate(
+                    cities.getGeographical().getLat()
+                    , cities.getGeographical().getLng()
+                    , LocalDate.now()
+                    , date
+            );
+        } else {
+            weatherDto = weatherService.readForecastDate(
+                    cities.getGeographical().getLat()
+                    , cities.getGeographical().getLng()
+                    , date
+                    ,  LocalDate.now()
+            );
+        }
 
         return iWeatherMapper.responseFromDto(weatherDto);
     }
@@ -159,7 +168,7 @@ public class CitiesService {
             throw generateGenericInternalError(e);
         }
         if (geographicalEntities == null || geographicalEntities.isEmpty())
-            throw generateEntityNotFound(provincia,"Provincia");
+            throw generateEntityNotFound(provincia, "Provincia");
 
         List<BigDecimal> lat = geographicalEntities.stream()
                 .map(x -> x.getLat())
@@ -191,8 +200,8 @@ public class CitiesService {
         return new InternalErrorException("Something went wrong", e, ErrorCode.INTERNAL_ERROR);
     }
 
-    private EntityNotFoundException generateEntityNotFound(String istat , String st) {
-        return new EntityNotFoundException("No data found for "+st+" :"+ istat, ErrorCode.DATA_NOT_FOUND);
+    private EntityNotFoundException generateEntityNotFound(String istat, String st) {
+        return new EntityNotFoundException("No data found for " + st + " :" + istat, ErrorCode.DATA_NOT_FOUND);
     }
 
 }

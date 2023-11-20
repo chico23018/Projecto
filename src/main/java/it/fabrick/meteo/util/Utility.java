@@ -1,5 +1,9 @@
 package it.fabrick.meteo.util;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.List;
+
 public final class Utility {
     private Utility() {
 
@@ -8,7 +12,21 @@ public final class Utility {
     public static String converteString(String str) {
           return str.toUpperCase();
     }
+    public static String createUrl(List<BigDecimal> list) {
+        StringBuilder builder = new StringBuilder() ;
+        for (BigDecimal bigDecimal :list){
+            builder.append(bigDecimal)
+                    .append(",");
+        }
+        return builder.toString();
+    }
 
+    public static boolean date(LocalDate localDate){
+        if (localDate.isAfter(LocalDate.now())||localDate.isEqual(LocalDate.now())){
+            return true;
+        }
+        return false;
+    }
     private String stringNew(String str) {
         String[] list = str.split(" ");
         StringBuilder stringBuilder = new StringBuilder();

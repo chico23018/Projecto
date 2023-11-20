@@ -1,30 +1,22 @@
 package it.fabrick.meteo.model;
 
-import it.fabrick.meteo.dto.CitiesResponseDto;
-import it.fabrick.meteo.dto.ProvinciesResponseDto;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 
 @Getter
 @Setter
 
 public class RegionsModel{
-    private Long id_regione;
-
-
+    private Long idRegions;
     private String regione;
-
     private Double superficie;
-
-    private Integer num_residenti;
-
+    private Integer numResidenti;
     private String presidente;
-
-
-    private List<CitiesModel> cities;
-
-    private List<ProvinciesResponseDto> provincies;
+    private String codIstat;
+    private Long codFiscale;
+    private Long piva;
+    private String pec;
+    private String sito;
+    private String sede;
 }

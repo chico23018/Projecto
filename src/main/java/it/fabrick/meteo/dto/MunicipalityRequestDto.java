@@ -8,7 +8,6 @@ import lombok.Setter;
 @Setter
 public class MunicipalityRequestDto {
 
-    private Long idMunicipality;
     private String municipality;
     private String regions;
     private String provincia;
