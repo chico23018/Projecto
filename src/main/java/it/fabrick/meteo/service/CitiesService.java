@@ -117,7 +117,7 @@ public class CitiesService {
         }
 
         if (cities == null)
-            throw new EntityNotFoundException("No data found for city : " + municipality, ErrorCode.DATA_NOT_FOUND);
+            throw generateEntityNotFound(municipality,"City");
         WeatherResponseDto responseDto = iWeatherMapper.responseFromDto(
                 weatherService.readForecast(
                         cities.getGeographical().getLat()
@@ -136,7 +136,7 @@ public class CitiesService {
         }
 
         if (cities == null)
-            throw new EntityNotFoundException("No data found for city : " + city, ErrorCode.DATA_NOT_FOUND);
+            throw generateEntityNotFound(city,"City");
 
 
         WeatherDto weatherDto = weatherService.readForecastDate(
@@ -159,7 +159,7 @@ public class CitiesService {
             throw generateGenericInternalError(e);
         }
         if (geographicalEntities == null || geographicalEntities.isEmpty())
-            throw new EntityNotFoundException("No data found for city : " + provincia, ErrorCode.DATA_NOT_FOUND);
+            throw generateEntityNotFound(provincia,"Provincia");
 
         List<BigDecimal> lat = geographicalEntities.stream()
                 .map(x -> x.getLat())
