@@ -1,4 +1,4 @@
-package it.fabrick.meteo.dto;
+package it.fabrick.meteo.dto.dtoMunicipality;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,7 @@ import lombok.Setter;
 
 @Getter
 @Setter
-public class MunicipalityRequestDto {
+public class MunicipalityRequestUpdateDto {
 
     private String municipality;
     private String regions;

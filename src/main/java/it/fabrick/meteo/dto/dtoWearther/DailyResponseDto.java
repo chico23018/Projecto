@@ -1,4 +1,4 @@
-package it.fabrick.meteo.weartherDto;
+package it.fabrick.meteo.dto.dtoWearther;
 
 import lombok.Getter;
 import lombok.Setter;

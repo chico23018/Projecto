@@ -27,7 +27,7 @@ public class GeographicalService {
                 .collect(Collectors.toList());
     }
 
-    public GeographicalModel CreateGeographical(GeographicalModel geographicalModel) {
+    public GeographicalModel createGeographical(GeographicalModel geographicalModel) {
         GeographicalEntity geographical;
         try {
             geographical = geographicalRepository.save(iGeographicalMapper.entityFromModel(geographicalModel));

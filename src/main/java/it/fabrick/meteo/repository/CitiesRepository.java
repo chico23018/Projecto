@@ -10,7 +10,7 @@ import java.util.List;
 
 @Repository
 public interface CitiesRepository extends JpaRepository<CitiesEntity, String> {
-    int deleteByIstat(String istat);
+    int deleteByRegionsRegioneAndProvinciaProvinciaAndIstat(String region, String provinvia,String istat);
 
     CitiesEntity findByComune(String comune);
 

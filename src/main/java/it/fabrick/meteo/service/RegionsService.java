@@ -9,6 +9,7 @@ import it.fabrick.meteo.model.RegionsModel;
 import it.fabrick.meteo.repository.RegionsRepository;
 import it.fabrick.meteo.util.UtilData;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -31,13 +32,13 @@ public class RegionsService {
     public RegionsModel readRegion(String region) {
         Optional<RegionsEntity> regionsModel;
         try {
-            regionsModel =Optional.of(regionsRepository.findByRegione(region));
-        }catch (Exception e){
+            regionsModel = Optional.of(regionsRepository.findByRegione(region));
+        } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
 
         return regionsModel.map(iRegionsMapper::modelFromEntity)
-                .orElseThrow(() -> new  EntityNotFoundException(String.format("Region is nor present '%s' ", region),ErrorCode.DATA_NOT_FOUND));
+                .orElseThrow(() -> new EntityNotFoundException(String.format("Region is nor present '%s' ", region), ErrorCode.DATA_NOT_FOUND));
     }
 
     public List<RegionsModel> readRegions() {
@@ -47,7 +48,7 @@ public class RegionsService {
                 .collect(Collectors.toList());
     }
 
-    public RegionsModel CreateRegions(RegionsModel regionsModel) {
+    public RegionsModel createRegions(RegionsModel regionsModel) {
         RegionsEntity regions;
         try {
             regions = regionsRepository.save(iRegionsMapper.entityFromModel(regionsModel));
@@ -84,11 +85,13 @@ public class RegionsService {
 
     }
 
-    public void deleteRegions(long id_regions) {
+    @Transactional
+    public void deleteRegions(Long id_regions) {
         int howMany = 0;
         try {
             howMany = regionsRepository.deleteByIdRegions(id_regions);
         } catch (Exception e) {
+
             throw generateGenericInternalError(e);
         }
         if (howMany == 0)

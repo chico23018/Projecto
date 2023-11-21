@@ -1,11 +1,10 @@
 package it.fabrick.meteo.test;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.fabrick.meteo.dto.RequestNunResident;
 import it.fabrick.meteo.dto.RequestNunResidentAndPlace;
-import it.fabrick.meteo.weartherDto.WeatherDays;
-import it.fabrick.meteo.weartherDto.WeatherRequestDto;
+import it.fabrick.meteo.dto.dtoWearther.WeatherDays;
+import it.fabrick.meteo.dto.dtoWearther.WeatherRequestDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -35,7 +34,7 @@ public class RestControllerTest {
     void shouldReadRegion() throws Exception {
 
         String content = objectMapper.writeValueAsString(create("lombardia", 10000));
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/regions")
+        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/regions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
@@ -46,7 +45,7 @@ public class RestControllerTest {
     @Test
     void shouldReadRegionBadRequest() throws Exception {
         String content = objectMapper.writeValueAsString(create("lomba", 10000));
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/regions")
+        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/regions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
@@ -56,7 +55,7 @@ public class RestControllerTest {
     @Test
     void shouldReadProvinvia() throws Exception {
         String content = objectMapper.writeValueAsString(create("milano", 10000));
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/provincia")
+        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/provincia")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
@@ -67,7 +66,7 @@ public class RestControllerTest {
     @Test
     void shouldReadProvinviaBadRequest() throws Exception {
         String content = objectMapper.writeValueAsString(create("milan", 10000));
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/provincia")
+        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/provincia")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
@@ -79,7 +78,7 @@ public class RestControllerTest {
         RequestNunResident requestNunResident = new RequestNunResident();
         requestNunResident.setNumResident(1000);
         String content = objectMapper.writeValueAsString(requestNunResident);
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/city")
+        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/city")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
@@ -92,7 +91,7 @@ public class RestControllerTest {
         RequestNunResident requestNunResident = new RequestNunResident();
         requestNunResident.setNumResident(0);
         String content = objectMapper.writeValueAsString(requestNunResident);
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/city")
+        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/city")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())

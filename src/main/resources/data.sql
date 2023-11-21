@@ -4,7 +4,7 @@ DROP TABLE IF EXISTS CITIES;
 DROP TABLE IF EXISTS PROVINCIA;
 DROP TABLE IF EXISTS REGIONS;
 CREATE TABLE REGIONS(
-id_regione INTEGER PRIMARY KEY,
+id_regione BIGINT PRIMARY KEY,
 regione VARCHAR(70) not null ,
 superficie  DOUBLE not null,
 num_residenti INTEGER not null,
@@ -30,7 +30,7 @@ foreign key (id_regione ) references regions (id_regione ) ON DELETE CASCADE ON 
 
 
 CREATE TABLE CITIES (
-istat INTEGER  PRIMARY KEY,
+istat BIGINT  PRIMARY KEY,
 comune VARCHAR(70) not null ,
 sigla   VARCHAR(70) not null,
 id_regione VARCHAR(70) not null,
@@ -45,7 +45,7 @@ foreign key (id_regione ) references regions (id_regione ) ON DELETE CASCADE ON 
 
 
 CREATE TABLE geographical(
-id INTEGER GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
+id BIGINT GENERATED ALWAYS AS IDENTITY PRIMARY KEY ,
 istat INTEGER not null unique,
 longitude DOUBLE  not null,
 latitude DOUBLE  not null,

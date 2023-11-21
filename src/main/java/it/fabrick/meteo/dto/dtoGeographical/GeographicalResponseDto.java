@@ -1,4 +1,4 @@
-package it.fabrick.meteo.dto;
+package it.fabrick.meteo.dto.dtoGeographical;
 
 import lombok.Getter;
 import lombok.Setter;

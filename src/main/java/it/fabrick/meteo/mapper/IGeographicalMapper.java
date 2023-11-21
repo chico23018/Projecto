@@ -1,7 +1,7 @@
 package it.fabrick.meteo.mapper;
 
-import it.fabrick.meteo.dto.GeographicalRequestDto;
-import it.fabrick.meteo.dto.GeographicalResponseDto;
+import it.fabrick.meteo.dto.dtoGeographical.GeographicalRequestCreateDto;
+import it.fabrick.meteo.dto.dtoGeographical.GeographicalResponseDto;
 import it.fabrick.meteo.entity.GeographicalEntity;
 import it.fabrick.meteo.model.GeographicalModel;
 import org.mapstruct.Mapper;
@@ -15,6 +15,6 @@ public interface IGeographicalMapper {
     GeographicalResponseDto responseFromModel(GeographicalModel citiesModel);
     GeographicalModel modelFromResponse(GeographicalResponseDto geographicalResponseDto);
 
-    GeographicalRequestDto requestFromModel(GeographicalModel citiesModel);
-    GeographicalModel modelFromRequest(GeographicalRequestDto geographicalRequestDto);
+    GeographicalRequestCreateDto requestFromModel(GeographicalModel citiesModel);
+    GeographicalModel modelFromRequest(GeographicalRequestCreateDto geographicalRequestCreateDto);
 }

@@ -1,16 +1,14 @@
-package it.fabrick.meteo.dto;
+package it.fabrick.meteo.dto.dtoCity;
 
-import it.fabrick.meteo.entity.GeographicalEntity;
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 
 @Getter
 @Setter
 
-public class CitiesRequestDto {
+public class CitiesRequestUpdateDto {
+
     private String comune;
 
     private Integer prefisso;

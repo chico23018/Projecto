@@ -1,17 +1,13 @@
-package it.fabrick.meteo.dto;
+package it.fabrick.meteo.dto.dtoProvince;
 
 import lombok.Getter;
 import lombok.Setter;
-
-import java.util.List;
 
 
 @Getter
 @Setter
 
-public class ProvinciesRequestDto {
-    private String sigla;
-
+public class ProvinciesRequestUpdateDto {
     private String provincia;
 
     private Double superficie;

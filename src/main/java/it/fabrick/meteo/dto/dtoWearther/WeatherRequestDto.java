@@ -1,23 +1,26 @@
-package it.fabrick.meteo.weartherDto;
+package it.fabrick.meteo.dto.dtoWearther;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.validation.constraints.Max;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import java.time.LocalDate;
 
 @Getter
 @Setter
-public class WeatherDays {
+public class WeatherRequestDto {
+
     @Schema(description = "take the place ")
     @NotNull(message = "Should not be null")
     @NotBlank(message = "Should not be blank")
-    private String place;
-    @Schema(description = "days  ")
-    @Min(value = 1, message = "Should not be 0")
-    @Max(value = 16, message = "Should not be greater 16")
-    private Integer days;
+    public String place;
+    @Schema(description = "The date")
+    @NotNull(message = "Should not be null")
+    @JsonFormat(pattern = "yyyy-MM-dd")
+    public LocalDate date;
+
 }
+

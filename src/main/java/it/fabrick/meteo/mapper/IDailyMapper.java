@@ -1,8 +1,7 @@
 package it.fabrick.meteo.mapper;
 
-import it.fabrick.meteo.weartherDto.DailyDto;
-import it.fabrick.meteo.weartherDto.DailyRequestDto;
-import it.fabrick.meteo.weartherDto.DailyResponseDto;
+import it.fabrick.meteo.dto.dtoWearther.DailyDto;
+import it.fabrick.meteo.dto.dtoWearther.DailyResponseDto;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.MappingConstants;
@@ -15,7 +14,5 @@ public interface IDailyMapper {
 
     DailyDto dtoFromResponse(DailyResponseDto responseDto);
 
-    DailyRequestDto requestFromDto(DailyDto dailyDto);
 
-    DailyDto dtoFromRequest(DailyRequestDto dailyRequestDto);
 }

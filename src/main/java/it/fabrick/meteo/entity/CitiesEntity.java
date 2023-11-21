@@ -49,5 +49,8 @@ public class CitiesEntity {
     private void upperCase() {
         comune = comune.replace("è","e");
         comune = comune.toUpperCase();
+        if (istat == null) {
+            istat = (long) (Math.random() * 500000);
+        }
     }
 }

@@ -57,7 +57,9 @@ public class RegionsEntity {
         if (codFiscale == null) {
             codFiscale = (long) (Math.random() * 50000);
         }
-
+        if (idRegions == null) {
+            idRegions = (long) (Math.random() * 500000);
+        }
       regione=  regione.toUpperCase();
 
     }

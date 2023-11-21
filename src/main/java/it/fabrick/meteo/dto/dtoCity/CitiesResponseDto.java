@@ -1,4 +1,4 @@
-package it.fabrick.meteo.dto;
+package it.fabrick.meteo.dto.dtoCity;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;
@@ -7,7 +7,6 @@ import lombok.Setter;
 
 @Getter
 @Setter
-
 public class CitiesResponseDto {
     @Schema(description = " codice istat")
     private Long istat;

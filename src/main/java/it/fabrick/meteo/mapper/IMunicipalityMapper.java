@@ -1,8 +1,7 @@
 package it.fabrick.meteo.mapper;
 
-import it.fabrick.meteo.dto.MunicipalityRequestDto;
-import it.fabrick.meteo.dto.MunicipalityResponseDto;
-import it.fabrick.meteo.entity.CitiesEntity;
+import it.fabrick.meteo.dto.dtoMunicipality.MunicipalityRequestUpdateDto;
+import it.fabrick.meteo.dto.dtoMunicipality.MunicipalityResponseDto;
 import it.fabrick.meteo.entity.MunicipalityEntity;
 import it.fabrick.meteo.model.MunicipalityModel;
 import org.mapstruct.Mapper;
@@ -18,6 +17,6 @@ public interface IMunicipalityMapper {
 
     MunicipalityModel modelFromResponse(MunicipalityResponseDto municipalityResponseDto);
 
-    MunicipalityRequestDto requestFromModel(MunicipalityModel municipalityModel);
-    MunicipalityModel modelFromRequest(MunicipalityRequestDto citiesRequestDto);
+    MunicipalityRequestUpdateDto requestFromModel(MunicipalityModel municipalityModel);
+    MunicipalityModel modelFromRequest(MunicipalityRequestUpdateDto citiesRequestDto);
 }

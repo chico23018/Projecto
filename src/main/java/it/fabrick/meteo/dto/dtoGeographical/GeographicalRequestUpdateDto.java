@@ -1,4 +1,4 @@
-package it.fabrick.meteo.dto;
+package it.fabrick.meteo.dto.dtoGeographical;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -8,7 +8,7 @@ import java.math.BigDecimal;
 
 @Getter
 @Setter
-public class GeographicalRequestDto {
+public class GeographicalRequestUpdateDto {
 
     private BigDecimal lng;
 

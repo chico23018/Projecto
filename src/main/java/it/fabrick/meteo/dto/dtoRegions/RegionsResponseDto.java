@@ -1,4 +1,4 @@
-package it.fabrick.meteo.dto;
+package it.fabrick.meteo.dto.dtoRegions;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.Getter;

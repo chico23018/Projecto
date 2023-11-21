@@ -1,7 +1,8 @@
 package it.fabrick.meteo.mapper;
 
-import it.fabrick.meteo.dto.RegionsRequestDto;
-import it.fabrick.meteo.dto.RegionsResponseDto;
+import it.fabrick.meteo.dto.dtoRegions.RegionsRequestCreateDto;
+import it.fabrick.meteo.dto.dtoRegions.RegionsRequestUpdateDto;
+import it.fabrick.meteo.dto.dtoRegions.RegionsResponseDto;
 import it.fabrick.meteo.entity.RegionsEntity;
 import it.fabrick.meteo.model.RegionsModel;
 import org.mapstruct.Mapper;
@@ -15,6 +16,8 @@ public interface IRegionsMapper {
     RegionsResponseDto responseFromModel(RegionsModel regionsModel);
     RegionsModel modelFromResponse(RegionsResponseDto regionsResponseDto);
 
-    RegionsRequestDto requestFromModel(RegionsModel regionsModel);
-    RegionsModel modelFromRequest(RegionsRequestDto regionsRequestDto);
+    RegionsRequestCreateDto requestFromModel(RegionsModel regionsModel);
+    RegionsModel modelFromRequest(RegionsRequestCreateDto regionsRequestCreateDto);
+    RegionsRequestUpdateDto requestUpdateFromModel(RegionsModel regionsModel);
+    RegionsModel modelFromRequestUpdate(RegionsRequestUpdateDto regionsRequestUpdateDto);
 }

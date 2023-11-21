@@ -7,9 +7,11 @@ import it.fabrick.meteo.exception.InternalErrorException;
 import it.fabrick.meteo.mapper.IProvinciesMapper;
 import it.fabrick.meteo.model.ProvinciesModel;
 import it.fabrick.meteo.repository.ProvinciesRepository;
+import it.fabrick.meteo.repository.RegionsRepository;
 import it.fabrick.meteo.util.Utility;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Optional;
@@ -19,6 +21,7 @@ import java.util.stream.Collectors;
 @AllArgsConstructor
 public class ProvinciesService {
     private final ProvinciesRepository provinciesRepository;
+    private final RegionsRepository regionsRepository;
     private final IProvinciesMapper iProvinciesMapper;
 
     public List<ProvinciesModel> readProvincies(String region) {
@@ -29,8 +32,8 @@ public class ProvinciesService {
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
-        if(provinciesEntities.isEmpty())
-            throw generateEntityNotFound(region , "Region");
+        if (provinciesEntities.isEmpty())
+            throw generateEntityNotFound(region, "Region");
 
 
         return provinciesEntities
@@ -39,10 +42,11 @@ public class ProvinciesService {
                 .collect(Collectors.toList());
     }
 
-    public ProvinciesModel CreateProvincies(ProvinciesModel provinciesModel) {
-        ProvinciesEntity provincies;
+    public ProvinciesModel createProvincies(String region, ProvinciesModel provinciesModel) {
+        ProvinciesEntity provincies = iProvinciesMapper.entityFromModel(provinciesModel);
         try {
-            provincies = provinciesRepository.save(iProvinciesMapper.entityFromModel(provinciesModel));
+            provincies.setRegions(regionsRepository.findByRegione(region));
+            provincies = provinciesRepository.save(provincies);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
@@ -50,10 +54,13 @@ public class ProvinciesService {
         return iProvinciesMapper.modelFromEntity(provincies);
     }
 
-    public ProvinciesModel updateProvincies(String sigla, ProvinciesModel provinciesModel) {
+    public ProvinciesModel updateProvincies(String region, String sigla, ProvinciesModel provinciesModel) {
+        region = Utility.converteString(region);
+        sigla = Utility.converteString(sigla);
         Optional<ProvinciesEntity> reservationEntity;
         try {
-            reservationEntity = provinciesRepository.findById(sigla)
+
+            reservationEntity = provinciesRepository.findByRegionsRegioneAndSigla(region, sigla)
                     .map(entity -> {
                         Optional.ofNullable(provinciesModel.getSuperficie())
                                 .ifPresent(entity::setSuperficie);
@@ -66,17 +73,19 @@ public class ProvinciesService {
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
+        String finalSigla = sigla;
         return reservationEntity
                 .map(iProvinciesMapper::modelFromEntity)
-                .orElseThrow(() -> generateEntityNotFound(sigla, "sigla"));
+                .orElseThrow(() -> generateEntityNotFound(finalSigla, "sigla"));
 
     }
 
-    public void deleteProvincies(String sigla) {
+    @Transactional
+    public void deleteProvincies(String region, String sigla) {
 
         int howMany = 0;
         try {
-            howMany = provinciesRepository.deleteBySigla(sigla);
+            howMany = provinciesRepository.deleteByRegionsRegioneAndSigla(region, sigla);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
@@ -90,6 +99,6 @@ public class ProvinciesService {
     }
 
     private EntityNotFoundException generateEntityNotFound(String provincia, String pro) {
-        return new EntityNotFoundException("No data found for "+pro+": " + provincia, ErrorCode.DATA_NOT_FOUND);
+        return new EntityNotFoundException("No data found for " + pro + ": " + provincia, ErrorCode.DATA_NOT_FOUND);
     }
 }

@@ -1,6 +1,8 @@
 package it.fabrick.meteo.service;
 
 import it.fabrick.meteo.classEnum.ErrorCode;
+import it.fabrick.meteo.dto.dtoWearther.WeatherDto;
+import it.fabrick.meteo.dto.dtoWearther.WeatherResponseDto;
 import it.fabrick.meteo.entity.CitiesEntity;
 import it.fabrick.meteo.entity.GeographicalEntity;
 import it.fabrick.meteo.exception.EntityNotFoundException;
@@ -10,9 +12,9 @@ import it.fabrick.meteo.mapper.IWeatherMapper;
 import it.fabrick.meteo.model.CitiesModel;
 import it.fabrick.meteo.repository.CitiesRepository;
 import it.fabrick.meteo.repository.GeographicalRepository;
+import it.fabrick.meteo.repository.ProvinciesRepository;
+import it.fabrick.meteo.repository.RegionsRepository;
 import it.fabrick.meteo.util.Utility;
-import it.fabrick.meteo.weartherDto.WeatherDto;
-import it.fabrick.meteo.weartherDto.WeatherResponseDto;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -30,6 +32,8 @@ public class CitiesService {
     private final WeatherService weatherService;
     private final IWeatherMapper iWeatherMapper;
     private GeographicalRepository geographicalRepository;
+    private final ProvinciesRepository provinciesRepository;
+    private final RegionsRepository regionsRepository;
 
     public List<CitiesModel> readGreater(int numResident) {
         List<CitiesModel> citiesModels;
@@ -41,6 +45,8 @@ public class CitiesService {
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
+        if (citiesModels.isEmpty())
+            throw generateEntityNotFound("" + numResident, "resident");
 
         return citiesModels;
     }
@@ -49,23 +55,28 @@ public class CitiesService {
         region = Utility.converteString(region);
         provincia = Utility.converteString(provincia);
         List<CitiesEntity> citiesEntities = null;
-        try{
+        try {
             citiesEntities = citiesRepository.findByRegionsRegioneAndProvinciaProvincia(region, provincia);
-        }catch (Exception e){
+        } catch (Exception e) {
             generateGenericInternalError(e);
         }
-       if(citiesEntities!=null&&citiesEntities.isEmpty())
-           throw generateEntityNotFound(region+" and "+provincia, "Region and Province");
+        if (citiesEntities != null && citiesEntities.isEmpty())
+            throw generateEntityNotFound(region + " and " + provincia, "Region and Province");
         return citiesEntities
                 .stream()
                 .map(iCitiesMapper::modelFromEntity)
                 .collect(Collectors.toList());
     }
 
-    public CitiesModel CreateCities(CitiesModel citiesModel) {
-        CitiesEntity cities;
+    public CitiesModel createCities(String region, String province, CitiesModel citiesModel) {
+        region = Utility.converteString(region);
+        province = Utility.converteString(province);
+        CitiesEntity cities = iCitiesMapper.entityFromModel(citiesModel);
         try {
-            cities = citiesRepository.save(iCitiesMapper.entityFromModel(citiesModel));
+
+            cities.setRegions(regionsRepository.findByRegione(region));
+            cities.setProvincia(provinciesRepository.findByProvincia(province));
+            cities = citiesRepository.save(cities);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
@@ -74,8 +85,9 @@ public class CitiesService {
     }
 
     @Transactional
-    public CitiesModel updateCities(String istat, CitiesModel citiesModel, String regions, String provincia) {
-
+    public CitiesModel updateCities(String region, String province, String istat, CitiesModel citiesModel) {
+        region = Utility.converteString(region);
+        province = Utility.converteString(province);
         int howMany = 0;
         try {
             if (citiesModel.getComune() != null && citiesModel.getCodFisco() != null && citiesModel.getSuperficie() != null
@@ -83,17 +95,17 @@ public class CitiesService {
                     citiesModel.getNumResident() != null) {
                 howMany = citiesRepository.updateByIstatAndAll(istat, citiesModel.getComune(), citiesModel.getPrefisso()
                         , citiesModel.getCodFisco(), citiesModel.getSuperficie(), citiesModel.getNumResident()
-                        , regions, provincia);
+                        , region, province);
             } else if (citiesModel.getComune() != null) {
-                howMany = citiesRepository.updateByIstatAndComune(istat, citiesModel.getComune(), regions, provincia);
+                howMany = citiesRepository.updateByIstatAndComune(istat, citiesModel.getComune(), region, province);
             } else if (citiesModel.getCodFisco() != null) {
-                howMany = citiesRepository.updateByIstatAndCodFisco(istat, citiesModel.getCodFisco(), regions, provincia);
+                howMany = citiesRepository.updateByIstatAndCodFisco(istat, citiesModel.getCodFisco(), region, province);
             } else if (citiesModel.getSuperficie() != null) {
-                howMany = citiesRepository.updateByIstatAndSuperficie(istat, citiesModel.getSuperficie(), regions, provincia);
+                howMany = citiesRepository.updateByIstatAndSuperficie(istat, citiesModel.getSuperficie(), region, province);
             } else if (citiesModel.getPrefisso() != null) {
-                howMany = citiesRepository.updateByIstatAndPrefisso(istat, citiesModel.getPrefisso(), regions, provincia);
+                howMany = citiesRepository.updateByIstatAndPrefisso(istat, citiesModel.getPrefisso(), region, province);
             } else if (citiesModel.getNumResident() != null) {
-                howMany = citiesRepository.updateByIstatAndNum_residenti(istat, citiesModel.getNumResident(), regions, provincia);
+                howMany = citiesRepository.updateByIstatAndNum_residenti(istat, citiesModel.getNumResident(), region, province);
             }
         } catch (Exception e) {
             throw generateGenericInternalError(e);
@@ -105,10 +117,11 @@ public class CitiesService {
         return citiesRepository.findById(istat).map(iCitiesMapper::modelFromEntity).get();
     }
 
-    public void deleteCities(String istat) {
+    @Transactional
+    public void deleteCities(String region, String province, String istat) {
         int howMany = 0;
         try {
-            howMany = citiesRepository.deleteByIstat(istat);
+            howMany = citiesRepository.deleteByRegionsRegioneAndProvinciaProvinciaAndIstat(region, province, istat);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
@@ -137,7 +150,7 @@ public class CitiesService {
         return responseDto;
     }
 
-    public WeatherResponseDto readForecastDate(String city, int days) {
+    public WeatherResponseDto readForecastDays(String city, int days) {
 
         city = Utility.converteString(city);
         CitiesEntity cities;
@@ -151,7 +164,7 @@ public class CitiesService {
         if (cities == null)
             throw generateEntityNotFound(city, "City");
         WeatherDto weatherDto;
-        weatherDto = weatherService.readForecastDate(
+        weatherDto = weatherService.readForecastDays(
                 cities.getGeographical().getLat()
                 , cities.getGeographical().getLng()
                 , days
@@ -159,6 +172,42 @@ public class CitiesService {
         WeatherResponseDto responseDto = iWeatherMapper.responseFromDto(weatherDto);
         responseDto.setCity(city);
         responseDto.getDaily().setMediaTemperature(Utility.mediaTempera(responseDto.getDaily().getTemperature()));
+        return responseDto;
+    }
+
+    public WeatherResponseDto readForecastDate(String city, LocalDate date) {
+
+        city = Utility.converteString(city);
+        CitiesEntity cities;
+
+        try {
+            cities = citiesRepository.findByComune(city);
+        } catch (Exception e) {
+            throw generateGenericInternalError(e);
+        }
+
+        if (cities == null)
+            throw generateEntityNotFound(city, "City");
+        WeatherDto weatherDto;
+        if (Utility.date(date)) {
+            weatherDto = weatherService.readForecastDate(
+                    cities.getGeographical().getLat()
+                    , cities.getGeographical().getLng(),
+                    LocalDate.now(), date
+            );
+        } else {
+
+            weatherDto = weatherService.readForecastDate(
+                    cities.getGeographical().getLat()
+                    , cities.getGeographical().getLng()
+                    , date, LocalDate.now()
+            );
+        }
+
+        WeatherResponseDto responseDto = iWeatherMapper.responseFromDto(weatherDto);
+        responseDto.setCity(city);
+        responseDto.getDaily().setMediaTemperature(Utility.mediaTempera(responseDto.getDaily().getTemperature()));
+
         return responseDto;
     }
 
@@ -194,9 +243,9 @@ public class CitiesService {
         String media = String.valueOf(list.stream()
                 .reduce(Float::sum).get() / list.size());
 
-        String n = String.format("la media delle temperature è '%s' per la provincia di '%s' ", media, provincia);
+        String response = String.format("the average temperature is '%s' for the  province of '%s' for '%s' ", media, provincia, date);
 
-        return n;
+        return response;
     }
 
 
