@@ -51,31 +51,31 @@ public class CitiesService {
         return citiesModels;
     }
 
-    public List<CitiesModel> readCities(String region, String provincia) {
-        region = Utility.converteString(region);
-        provincia = Utility.converteString(provincia);
+    public List<CitiesModel> readCities(Long idRegion, String sigla) {
+
+        sigla = Utility.converteString(sigla);
         List<CitiesEntity> citiesEntities = null;
         try {
-            citiesEntities = citiesRepository.findByRegionsRegioneAndProvinciaProvincia(region, provincia);
+            citiesEntities = citiesRepository.findByRegionsIdRegionsAndProvinciaSigla(idRegion, sigla);
         } catch (Exception e) {
             generateGenericInternalError(e);
         }
         if (citiesEntities != null && citiesEntities.isEmpty())
-            throw generateEntityNotFound(region + " and " + provincia, "Region and Province");
+            throw generateEntityNotFound(idRegion + " and " + sigla, "Region and Province");
         return citiesEntities
                 .stream()
                 .map(iCitiesMapper::modelFromEntity)
                 .collect(Collectors.toList());
     }
 
-    public CitiesModel createCities(String region, String province, CitiesModel citiesModel) {
-        region = Utility.converteString(region);
-        province = Utility.converteString(province);
+    public CitiesModel createCities(Long region, String sigla, CitiesModel citiesModel) {
+
+        sigla = Utility.converteString(sigla);
         CitiesEntity cities = iCitiesMapper.entityFromModel(citiesModel);
         try {
 
-            cities.setRegions(regionsRepository.findByRegione(region));
-            cities.setProvincia(provinciesRepository.findByProvincia(province));
+            cities.setRegions(regionsRepository.findById(region).get());
+            cities.setProvincia(provinciesRepository.findById(sigla).get());
             cities = citiesRepository.save(cities);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
@@ -85,9 +85,9 @@ public class CitiesService {
     }
 
     @Transactional
-    public CitiesModel updateCities(String region, String province, String istat, CitiesModel citiesModel) {
-        region = Utility.converteString(region);
-        province = Utility.converteString(province);
+    public CitiesModel updateCities(Long idRegion, String sigla, Long istat, CitiesModel citiesModel) {
+
+        sigla = Utility.converteString(sigla);
         int howMany = 0;
         try {
             if (citiesModel.getComune() != null && citiesModel.getCodFisco() != null && citiesModel.getSuperficie() != null
@@ -95,38 +95,38 @@ public class CitiesService {
                     citiesModel.getNumResident() != null) {
                 howMany = citiesRepository.updateByIstatAndAll(istat, citiesModel.getComune(), citiesModel.getPrefisso()
                         , citiesModel.getCodFisco(), citiesModel.getSuperficie(), citiesModel.getNumResident()
-                        , region, province);
+                        , idRegion, sigla);
             } else if (citiesModel.getComune() != null) {
-                howMany = citiesRepository.updateByIstatAndComune(istat, citiesModel.getComune(), region, province);
+                howMany = citiesRepository.updateByIstatAndComune(istat, citiesModel.getComune(), idRegion, sigla);
             } else if (citiesModel.getCodFisco() != null) {
-                howMany = citiesRepository.updateByIstatAndCodFisco(istat, citiesModel.getCodFisco(), region, province);
+                howMany = citiesRepository.updateByIstatAndCodFisco(istat, citiesModel.getCodFisco(), idRegion, sigla);
             } else if (citiesModel.getSuperficie() != null) {
-                howMany = citiesRepository.updateByIstatAndSuperficie(istat, citiesModel.getSuperficie(), region, province);
+                howMany = citiesRepository.updateByIstatAndSuperficie(istat, citiesModel.getSuperficie(), idRegion, sigla);
             } else if (citiesModel.getPrefisso() != null) {
-                howMany = citiesRepository.updateByIstatAndPrefisso(istat, citiesModel.getPrefisso(), region, province);
+                howMany = citiesRepository.updateByIstatAndPrefisso(istat, citiesModel.getPrefisso(), idRegion, sigla);
             } else if (citiesModel.getNumResident() != null) {
-                howMany = citiesRepository.updateByIstatAndNum_residenti(istat, citiesModel.getNumResident(), region, province);
+                howMany = citiesRepository.updateByIstatAndNum_residenti(istat, citiesModel.getNumResident(), idRegion, sigla);
             }
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
 
         if (howMany == 0)
-            throw generateEntityNotFound(istat, "id");
+            throw generateEntityNotFound(""+istat, "id");
 
         return citiesRepository.findById(istat).map(iCitiesMapper::modelFromEntity).get();
     }
 
     @Transactional
-    public void deleteCities(String region, String province, String istat) {
+    public void deleteCities(Long idRegion, String sigla, Long istat) {
         int howMany = 0;
         try {
-            howMany = citiesRepository.deleteByRegionsRegioneAndProvinciaProvinciaAndIstat(region, province, istat);
+            howMany = citiesRepository.deleteByRegionsIdRegionsAndProvinciaSiglaAndIstat(idRegion, sigla, istat);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
         if (howMany == 0)
-            throw generateEntityNotFound(istat, "id");
+            throw generateEntityNotFound(""+istat, "id");
 
     }
 

@@ -80,7 +80,7 @@ public class MeteoController {
     public ResponseEntity<RegionsResponseDto> createRegions(@RequestBody RegionsRequestCreateDto regionsRequestCreateDto) {
         validationService.doValidate(regionsRequestCreateDto);
         RegionsModel regionsModel = regionsService.createRegions(iRegionsMapper.modelFromRequest(regionsRequestCreateDto));
-        return ResponseEntity.created(URI.create("/v1.0/weather" + regionsModel.getRegione())).body(iRegionsMapper.responseFromModel(regionsModel));
+        return ResponseEntity.created(URI.create("/v1.0/weather/" + regionsModel.getIdRegions())).body(iRegionsMapper.responseFromModel(regionsModel));
     }
 
     @Operation(description = "put regions")
@@ -93,8 +93,8 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @PutMapping("/{id}")
-    public ResponseEntity<RegionsResponseDto> updateRegions(@PathVariable(name = "id") long id,
+    @PutMapping("/{idRegions}")
+    public ResponseEntity<RegionsResponseDto> updateRegions(@PathVariable(name = "idRegions") long id,
                                                             @RequestBody RegionsRequestUpdateDto regionsRequestUpdateDto) {
         RegionsModel regionsModel = regionsService.updateRegions
                 (id,
@@ -111,8 +111,8 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteRegions(@PathVariable(name = "id") Long id) {
+    @DeleteMapping("/{idRegions}")
+    public ResponseEntity<Void> deleteRegions(@PathVariable(name = "idRegions") Long id) {
         regionsService.deleteRegions(id);
         return ResponseEntity.noContent().build();
     }
@@ -125,9 +125,9 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @GetMapping("/{regions}/province")
-    public ResponseEntity<List<ProvinciesResponseDto>> readProvince(@PathVariable("regions") String region) {
-        List<ProvinciesResponseDto> regionsResponseDtos = provinciesService.readProvincies(region)
+    @GetMapping("/{idRegions}/province")
+    public ResponseEntity<List<ProvinciesResponseDto>> readProvince(@PathVariable("idRegions") Long idRegions) {
+        List<ProvinciesResponseDto> regionsResponseDtos = provinciesService.readProvincies(idRegions)
                 .stream()
                 .map(iProvinciesMapper::responseFromModel)
                 .collect(Collectors.toList());
@@ -143,13 +143,13 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @PostMapping("/{regions}/province")
-    public ResponseEntity<ProvinciesResponseDto> createProvince(@PathVariable(name = "regions") String regions,
+    @PostMapping("/{idRegions}/province")
+    public ResponseEntity<ProvinciesResponseDto> createProvince(@PathVariable(name = "idRegions") Long idRegions,
                                                                 @RequestBody
                                                                 ProvinciesRequestCreateDto provinciesRequestCreateDto) {
         validationService.doValidate(provinciesRequestCreateDto);
-        ProvinciesModel provinciesModel = provinciesService.createProvincies(regions, iProvinciesMapper.modelFromRequest(provinciesRequestCreateDto));
-        return ResponseEntity.created(URI.create("/v1.0/weather" + provinciesModel.getSigla())).body(iProvinciesMapper.responseFromModel(provinciesModel));
+        ProvinciesModel provinciesModel = provinciesService.createProvincies(idRegions, iProvinciesMapper.modelFromRequest(provinciesRequestCreateDto));
+        return ResponseEntity.created(URI.create("/v1.0/weather/"+idRegions+"/province/" + provinciesModel.getSigla())).body(iProvinciesMapper.responseFromModel(provinciesModel));
     }
 
     @Operation(description = "put province")
@@ -162,12 +162,12 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @PutMapping("/{regions}/province/{sigla}")
-    public ResponseEntity<ProvinciesResponseDto> updateProvince(@PathVariable(name = "regions") String regions,
+    @PutMapping("/{idRegions}/province/{sigla}")
+    public ResponseEntity<ProvinciesResponseDto> updateProvince(@PathVariable(name = "idRegions") Long idRegions,
                                                                 @PathVariable(name = "sigla") String sigla,
                                                                 @RequestBody ProvinciesRequestUpdateDto requestUpdateDto) {
         ProvinciesModel provinciesModel = provinciesService.updateProvincies
-                (regions, sigla, iProvinciesMapper.modelFromRequestUpdate(requestUpdateDto));
+                (idRegions, sigla, iProvinciesMapper.modelFromRequestUpdate(requestUpdateDto));
         return ResponseEntity.ok(iProvinciesMapper.responseFromModel(provinciesModel));
     }
 
@@ -179,9 +179,10 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @DeleteMapping("/{regions}/province/{sigla}")
-    public ResponseEntity<Void> deleteProvince(@PathVariable(name = "regions") String regions, @PathVariable(name = "sigla") String sigla) {
-        provinciesService.deleteProvincies(regions, sigla);
+    @DeleteMapping("/{idRegions}/province/{sigla}")
+    public ResponseEntity<Void> deleteProvince(@PathVariable(name = "idRegions") Long idRegions,
+                                               @PathVariable(name = "sigla") String sigla) {
+        provinciesService.deleteProvincies(idRegions, sigla);
         return ResponseEntity.noContent().build();
     }
 
@@ -195,17 +196,17 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @GetMapping("/{region}/province/{province}/cities")
-    public ResponseEntity<List<CitiesResponseDto>> readCities(@PathVariable("region") String region,
-                                                              @PathVariable("province") String province) {
-        List<CitiesResponseDto> regionsResponseDtos = citiesService.readCities(region, province)
+    @GetMapping("/{idRegions}/province/{sigla}/cities")
+    public ResponseEntity<List<CitiesResponseDto>> readCities(@PathVariable("idRegions") Long idRegions,
+                                                              @PathVariable("sigla") String sigla) {
+        List<CitiesResponseDto> regionsResponseDtos = citiesService.readCities(idRegions, sigla)
                 .stream()
                 .map(iCitiesMapper::responseFromModel)
                 .collect(Collectors.toList());
         return ResponseEntity.ok(regionsResponseDtos);
     }
 
-    @Operation(description = "create province")
+    @Operation(description = "create Cities")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "201", description = "CREATE"),
             @ApiResponse(responseCode = "400", description = "DATA NOT VALID",
@@ -214,20 +215,20 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @PostMapping("/{region}/province/{province}/cities")
-    public ResponseEntity<CitiesResponseDto> createCities(@PathVariable(name = "region") String regions,
-                                                          @PathVariable(name = "province") String province,
+    @PostMapping("/{idRegions}/province/{sigla}/cities")
+    public ResponseEntity<CitiesResponseDto> createCities(@PathVariable(name = "idRegions") Long idRegions,
+                                                          @PathVariable(name = "sigla") String sigla,
 
                                                           @RequestBody
                                                           CitiesRequestCreateDto citiesRequestCreateDto) {
         validationService.doValidate(citiesRequestCreateDto);
         CitiesModel citiesModel = citiesService.createCities
-                (regions, province, iCitiesMapper.modelFromRequest(citiesRequestCreateDto));
-        return ResponseEntity.created(URI.create("/v1.0/weather/" + regions + "/province/" + province + "/cities" + citiesModel.getIstat()))
+                (idRegions, sigla, iCitiesMapper.modelFromRequest(citiesRequestCreateDto));
+        return ResponseEntity.created(URI.create("/v1.0/weather/" + idRegions + "/province/" + sigla + "/cities/" + citiesModel.getIstat()))
                 .body(iCitiesMapper.responseFromModel(citiesModel));
     }
 
-    @Operation(description = "put province")
+    @Operation(description = "put Cities")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "DATA NOT VALID",
@@ -237,17 +238,17 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @PutMapping("/{region}/province/{province}/cities/{istat}")
-    public ResponseEntity<CitiesResponseDto> updateCities(@PathVariable(name = "region") String regions,
-                                                          @PathVariable(name = "province") String province,
-                                                          @PathVariable(name = "istat") String istat,
+    @PutMapping("/{idRegions}/province/{sigla}/cities/{istat}")
+    public ResponseEntity<CitiesResponseDto> updateCities(@PathVariable(name = "idRegions") Long idRegions,
+                                                          @PathVariable(name = "sigla") String sigla,
+                                                          @PathVariable(name = "istat") Long istat,
                                                           @RequestBody CitiesRequestUpdateDto citiesRequestUpdateDto) {
         CitiesModel citiesModel = citiesService.updateCities
-                (regions, province, istat, iCitiesMapper.modelFromRequestUpdate(citiesRequestUpdateDto));
+                (idRegions, sigla, istat, iCitiesMapper.modelFromRequestUpdate(citiesRequestUpdateDto));
         return ResponseEntity.ok(iCitiesMapper.responseFromModel(citiesModel));
     }
 
-    @Operation(description = "delete province")
+    @Operation(description = "delete Cities")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "204", description = "OK"),
             @ApiResponse(responseCode = "404", description = "NOT FOUND",
@@ -255,11 +256,11 @@ public class MeteoController {
             @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR",
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
-    @DeleteMapping("/{region}/province/{province}/cities/{istat}")
-    public ResponseEntity<Void> deleteCities(@PathVariable(name = "region") String regions,
-                                             @PathVariable(name = "province") String province,
-                                             @PathVariable(name = "istat") String istat) {
-        citiesService.deleteCities(regions, province,istat);
+    @DeleteMapping("/{idRegions}/province/{sigla}/cities/{istat}")
+    public ResponseEntity<Void> deleteCities(@PathVariable(name = "idRegions") Long idRegions,
+                                             @PathVariable(name = "sigla") String sigla,
+                                             @PathVariable(name = "istat") Long istat) {
+        citiesService.deleteCities(idRegions, sigla, istat);
         return ResponseEntity.noContent().build();
     }
 

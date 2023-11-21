@@ -24,16 +24,16 @@ public class ProvinciesService {
     private final RegionsRepository regionsRepository;
     private final IProvinciesMapper iProvinciesMapper;
 
-    public List<ProvinciesModel> readProvincies(String region) {
-        region = Utility.converteString(region);
+    public List<ProvinciesModel> readProvincies(Long IdRegions) {
+
         List<ProvinciesEntity> provinciesEntities;
         try {
-            provinciesEntities = provinciesRepository.findByRegionsRegione(region);
+            provinciesEntities = provinciesRepository.findByRegionsIdRegions(IdRegions);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }
         if (provinciesEntities.isEmpty())
-            throw generateEntityNotFound(region, "Region");
+            throw generateEntityNotFound(""+IdRegions, "Region");
 
 
         return provinciesEntities
@@ -42,10 +42,10 @@ public class ProvinciesService {
                 .collect(Collectors.toList());
     }
 
-    public ProvinciesModel createProvincies(String region, ProvinciesModel provinciesModel) {
+    public ProvinciesModel createProvincies(Long IdRegions, ProvinciesModel provinciesModel) {
         ProvinciesEntity provincies = iProvinciesMapper.entityFromModel(provinciesModel);
         try {
-            provincies.setRegions(regionsRepository.findByRegione(region));
+            provincies.setRegions(regionsRepository.findById(IdRegions).get());
             provincies = provinciesRepository.save(provincies);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
@@ -54,13 +54,13 @@ public class ProvinciesService {
         return iProvinciesMapper.modelFromEntity(provincies);
     }
 
-    public ProvinciesModel updateProvincies(String region, String sigla, ProvinciesModel provinciesModel) {
-        region = Utility.converteString(region);
+    public ProvinciesModel updateProvincies(Long region, String sigla, ProvinciesModel provinciesModel) {
+
         sigla = Utility.converteString(sigla);
         Optional<ProvinciesEntity> reservationEntity;
         try {
 
-            reservationEntity = provinciesRepository.findByRegionsRegioneAndSigla(region, sigla)
+            reservationEntity = provinciesRepository.findByRegionsIdRegionsAndSigla(region, sigla)
                     .map(entity -> {
                         Optional.ofNullable(provinciesModel.getSuperficie())
                                 .ifPresent(entity::setSuperficie);
@@ -81,11 +81,11 @@ public class ProvinciesService {
     }
 
     @Transactional
-    public void deleteProvincies(String region, String sigla) {
+    public void deleteProvincies(Long IdRegione, String sigla) {
 
         int howMany = 0;
         try {
-            howMany = provinciesRepository.deleteByRegionsRegioneAndSigla(region, sigla);
+            howMany = provinciesRepository.deleteByRegionsIdRegionsAndSigla(IdRegione, sigla);
         } catch (Exception e) {
             throw generateGenericInternalError(e);
         }

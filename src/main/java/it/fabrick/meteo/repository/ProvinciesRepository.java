@@ -9,8 +9,8 @@ import java.util.Optional;
 
 @Repository
 public interface ProvinciesRepository extends JpaRepository<ProvinciesEntity,String> {
-    int deleteByRegionsRegioneAndSigla(String region, String sigla);
+    int deleteByRegionsIdRegionsAndSigla(Long region, String sigla);
     ProvinciesEntity findByProvincia(String provincia);
-    Optional<ProvinciesEntity> findByRegionsRegioneAndSigla(String region, String sigla);
-    List<ProvinciesEntity> findByRegionsRegione(String region);
+    Optional<ProvinciesEntity> findByRegionsIdRegionsAndSigla(Long region, String sigla);
+    List<ProvinciesEntity> findByRegionsIdRegions(Long region);
 }

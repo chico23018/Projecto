@@ -9,12 +9,12 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 @Repository
-public interface CitiesRepository extends JpaRepository<CitiesEntity, String> {
-    int deleteByRegionsRegioneAndProvinciaProvinciaAndIstat(String region, String provinvia,String istat);
+public interface CitiesRepository extends JpaRepository<CitiesEntity, Long> {
+    int deleteByRegionsIdRegionsAndProvinciaSiglaAndIstat(Long idRegion, String provinvia, Long istat);
 
     CitiesEntity findByComune(String comune);
 
-    List<CitiesEntity> findByRegionsRegioneAndProvinciaProvincia(String region, String provinvia);
+    List<CitiesEntity> findByRegionsIdRegionsAndProvinciaSigla(Long region, String sigla);
 
     List<CitiesEntity> findByNumResidentGreaterThan(int resident);
 
@@ -24,28 +24,28 @@ public interface CitiesRepository extends JpaRepository<CitiesEntity, String> {
     @Query("update cities c set c.comune = :comune," +
             "c.prefisso = :prefisso,c.codFisco = :cod_fisco,c.superficie = :superficie," +
             "c.numResident = :numResident where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
-    int updateByIstatAndAll(String istat, String comune, int prefisso
+    int updateByIstatAndAll(Long istat, String comune, int prefisso
             , String cod_fisco, double superficie, int numResident
-            , String regione, String provincia);
+            , Long regione, String provincia);
 
     @Modifying
     @Query("update cities c set c.comune = :comune where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
-    int updateByIstatAndComune(String istat, String comune, String regione, String provincia);
+    int updateByIstatAndComune(Long istat, String comune, Long regione, String provincia);
 
     @Modifying
     @Query("update cities c set c.prefisso = :prefisso where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
-    int updateByIstatAndPrefisso(String istat, int prefisso, String regione, String provincia);
+    int updateByIstatAndPrefisso(Long istat, int prefisso, Long regione, String provincia);
 
     @Modifying
     @Query("update cities c set c.codFisco = :cod_fisco  where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
-    int updateByIstatAndCodFisco(String istat, String cod_fisco, String regione, String provincia);
+    int updateByIstatAndCodFisco(Long istat, String cod_fisco, Long regione, String provincia);
 
     @Modifying
     @Query("update cities c set c.superficie = :superficie where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
-    int updateByIstatAndSuperficie(String istat, double superficie, String regione, String provincia);
+    int updateByIstatAndSuperficie(Long istat, double superficie, Long regione, String provincia);
 
     @Modifying
     @Query("update cities c set c.numResident = :numResident where c.istat = :istat and c.regions.idRegions = :regione and c.provincia.sigla = :provincia")
-    int updateByIstatAndNum_residenti(String istat, int numResident, String regione, String provincia);
+    int updateByIstatAndNum_residenti(Long istat, int numResident, Long regione, String provincia);
 
 }

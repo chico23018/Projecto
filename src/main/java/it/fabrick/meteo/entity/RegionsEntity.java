@@ -51,6 +51,7 @@ public class RegionsEntity {
 
     @PrePersist
     public void v() {
+        regione=  regione.toUpperCase();
         if (piva == null) {
             piva = (long) (Math.random() * 50000);
         }
@@ -60,7 +61,7 @@ public class RegionsEntity {
         if (idRegions == null) {
             idRegions = (long) (Math.random() * 500000);
         }
-      regione=  regione.toUpperCase();
+
 
     }
 }
