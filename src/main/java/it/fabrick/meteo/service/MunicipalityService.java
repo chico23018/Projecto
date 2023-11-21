@@ -71,6 +71,6 @@ public class MunicipalityService {
     }
 
     private EntityNotFoundException generateEntityNotFound(String istat, String st) {
-        return new EntityNotFoundException("No data found for" + st + " :" + istat, ErrorCode.DATA_NOT_FOUND);
+        return new EntityNotFoundException("No data found for " + st + " :" + istat, ErrorCode.DATA_NOT_FOUND);
     }
 }

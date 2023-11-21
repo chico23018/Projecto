@@ -50,6 +50,7 @@ public class RegionsEntity {
     private List<ProvinciesEntity> provincies;
 
     @PrePersist
+    @PreUpdate
     public void v() {
         regione=  regione.toUpperCase();
         if (piva == null) {

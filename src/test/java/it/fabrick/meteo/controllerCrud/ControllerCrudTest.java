@@ -75,7 +75,7 @@ public class ControllerCrudTest {
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.regione", Matchers.is("PippoUpdate")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.regione", Matchers.is("PippoUpdate".toUpperCase())))
         ;
         content = objectMapper.writeValueAsString(provinciesRequestUpdateDto());
         System.out.println(createProvince);
@@ -84,7 +84,7 @@ public class ControllerCrudTest {
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.provincia", Matchers.is("PippoUpdate")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.provincia", Matchers.is("PippoUpdate".toUpperCase())))
         ;
         content = objectMapper.writeValueAsString(citiesRequestUpdateDto());
         mockMvc.perform(MockMvcRequestBuilders.put(createCities)
@@ -92,7 +92,7 @@ public class ControllerCrudTest {
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.comune", Matchers.is("pippoLandUpdate")))
+                .andExpect(MockMvcResultMatchers.jsonPath("$.comune", Matchers.is("pippoLandUpdate".toUpperCase())))
         ;
     }
 

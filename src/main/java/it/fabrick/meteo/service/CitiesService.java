@@ -86,6 +86,7 @@ public class CitiesService {
 
     @Transactional
     public CitiesModel updateCities(Long idRegion, String sigla, Long istat, CitiesModel citiesModel) {
+        citiesModel.setComune(citiesModel.getComune().toUpperCase());
 
         sigla = Utility.converteString(sigla);
         int howMany = 0;
@@ -112,7 +113,7 @@ public class CitiesService {
         }
 
         if (howMany == 0)
-            throw generateEntityNotFound(""+istat, "id");
+            throw generateEntityNotFound("" + istat, "id");
 
         return citiesRepository.findById(istat).map(iCitiesMapper::modelFromEntity).get();
     }
@@ -126,7 +127,7 @@ public class CitiesService {
             throw generateGenericInternalError(e);
         }
         if (howMany == 0)
-            throw generateEntityNotFound(""+istat, "id");
+            throw generateEntityNotFound("" + istat, "id");
 
     }
 

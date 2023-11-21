@@ -46,6 +46,7 @@ public class CitiesEntity {
     private MunicipalityEntity municipalityEntity;
 
     @PrePersist
+    @PreUpdate
     private void upperCase() {
         comune = comune.replace("è","e");
         comune = comune.toUpperCase();
