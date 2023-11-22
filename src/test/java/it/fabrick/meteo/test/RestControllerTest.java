@@ -3,8 +3,6 @@ package it.fabrick.meteo.test;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.fabrick.meteo.dto.RequestNunResident;
 import it.fabrick.meteo.dto.RequestNunResidentAndPlace;
-import it.fabrick.meteo.dto.dtoWearther.WeatherDays;
-import it.fabrick.meteo.dto.dtoWearther.WeatherRequestDto;
 import org.hamcrest.Matchers;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInstance;
@@ -17,7 +15,8 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
-import java.time.LocalDate;
+import static it.fabrick.meteo.constant.Constant.path3;
+import static it.fabrick.meteo.constant.Constant.search;
 
 @SpringBootTest
 @AutoConfigureMockMvc
@@ -25,7 +24,7 @@ import java.time.LocalDate;
 public class RestControllerTest {
     @Autowired
     MockMvc mockMvc;
-    private String path = "/v1.0/weather";
+
 
     @Autowired
     private ObjectMapper objectMapper;
@@ -34,7 +33,7 @@ public class RestControllerTest {
     void shouldReadRegion() throws Exception {
 
         String content = objectMapper.writeValueAsString(create("lombardia", 10000));
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/regions")
+        mockMvc.perform(MockMvcRequestBuilders.post(path3 +search+ "/regions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
@@ -45,7 +44,7 @@ public class RestControllerTest {
     @Test
     void shouldReadRegionBadRequest() throws Exception {
         String content = objectMapper.writeValueAsString(create("lomba", 10000));
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/regions")
+        mockMvc.perform(MockMvcRequestBuilders.post(path3+search + "/regions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
@@ -55,7 +54,7 @@ public class RestControllerTest {
     @Test
     void shouldReadProvinvia() throws Exception {
         String content = objectMapper.writeValueAsString(create("milano", 10000));
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/provincia")
+        mockMvc.perform(MockMvcRequestBuilders.post(path3+search + "/provincia")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
@@ -66,7 +65,7 @@ public class RestControllerTest {
     @Test
     void shouldReadProvinviaBadRequest() throws Exception {
         String content = objectMapper.writeValueAsString(create("milan", 10000));
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/provincia")
+        mockMvc.perform(MockMvcRequestBuilders.post(path3+search + "/provincia")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
@@ -78,7 +77,7 @@ public class RestControllerTest {
         RequestNunResident requestNunResident = new RequestNunResident();
         requestNunResident.setNumResident(1000);
         String content = objectMapper.writeValueAsString(requestNunResident);
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/city")
+        mockMvc.perform(MockMvcRequestBuilders.post(path3+search + "/city")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
@@ -91,51 +90,13 @@ public class RestControllerTest {
         RequestNunResident requestNunResident = new RequestNunResident();
         requestNunResident.setNumResident(0);
         String content = objectMapper.writeValueAsString(requestNunResident);
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/numResident/city")
+        mockMvc.perform(MockMvcRequestBuilders.post(path3+search + "/city")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest());
     }
 
-    @Test
-    void shouldReadForecastCity() throws Exception {
-
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/forecast/brescia"))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.city", Matchers.is("BRESCIA")));
-    }
-
-    @Test
-    void shouldReadForecasProvicia() throws Exception {
-        WeatherRequestDto weatherRequestDto = new WeatherRequestDto();
-        weatherRequestDto.setPlace("milano");
-        weatherRequestDto.setDate(LocalDate.parse("2023-11-10"));
-
-        String content = objectMapper.writeValueAsString(weatherRequestDto);
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/forecast/provincia")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk());
-    }
-
-    @Test
-    void shouldReadForecastDays() throws Exception {
-
-        WeatherDays days = new WeatherDays();
-        days.setDays(5);
-        days.setPlace("desenzano del garda");
-        String content = objectMapper.writeValueAsString(days);
-        mockMvc.perform(MockMvcRequestBuilders.post(path + "/forecast/days")
-                        .contentType(MediaType.APPLICATION_JSON)
-                        .content(content))
-                .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.city", Matchers.is("DESENZANO DEL GARDA")));
-               ;
-    }
 
 
     private RequestNunResidentAndPlace create(String place, int numResident) {
@@ -144,13 +105,6 @@ public class RestControllerTest {
         requestNunResidentAndPlace.setNumResident(numResident);
 
         return requestNunResidentAndPlace;
-    }
-    private WeatherRequestDto create(String place, LocalDate numResident) {
-        WeatherRequestDto weatherRequestDto = new WeatherRequestDto();
-        weatherRequestDto.setPlace(place);
-        weatherRequestDto.setDate(numResident);
-
-        return weatherRequestDto;
     }
 
 }

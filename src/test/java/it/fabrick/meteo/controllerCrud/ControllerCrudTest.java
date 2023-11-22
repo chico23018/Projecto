@@ -21,15 +21,16 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.result.MockMvcResultHandlers;
 import org.springframework.test.web.servlet.result.MockMvcResultMatchers;
 
+import static it.fabrick.meteo.constant.Constant.path2;
+
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
-@Slf4j
 public class ControllerCrudTest {
     @Autowired
     MockMvc mockMvc;
-    private String path = "/v1.0/weather";
+    private String path = path2;
     private String createRegion = "";
     private String createProvince = "";
     private String createCities = "";
@@ -38,7 +39,7 @@ public class ControllerCrudTest {
     private ObjectMapper objectMapper;
 
     @BeforeAll
-    void shouldCreate() throws Exception {
+    void shouldCreateRegion() throws Exception {
         String content = objectMapper.writeValueAsString(regionsRequestCreateDto());
         MvcResult mvcResult = mockMvc.perform(MockMvcRequestBuilders.post(path)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -48,7 +49,13 @@ public class ControllerCrudTest {
                 .andReturn();
         createRegion = mvcResult.getResponse().getHeader(HttpHeaders.LOCATION);
 
-        content = objectMapper.writeValueAsString(provinciesRequestCreateDto());
+
+    }
+
+    @Test
+    @Order(1)
+    void shouldCreateProvince() throws Exception {
+        String content = objectMapper.writeValueAsString(provinciesRequestCreateDto());
         MvcResult mvcResult1 = mockMvc.perform(MockMvcRequestBuilders.post(createRegion + "/province")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
@@ -56,7 +63,12 @@ public class ControllerCrudTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn();
         createProvince = mvcResult1.getResponse().getHeader(HttpHeaders.LOCATION);
-        content = objectMapper.writeValueAsString(citiesRequestCreateDto());
+    }
+
+    @Test
+    @Order(2)
+    void shouldCreateCity() throws Exception {
+        String content = objectMapper.writeValueAsString(citiesRequestCreateDto());
         MvcResult mvcResult2 = mockMvc.perform(MockMvcRequestBuilders.post(createProvince + "/cities")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
@@ -64,11 +76,12 @@ public class ControllerCrudTest {
                 .andExpect(MockMvcResultMatchers.status().isCreated())
                 .andReturn();
         createCities = mvcResult2.getResponse().getHeader(HttpHeaders.LOCATION);
+
     }
 
     @Test
-    @Order(1)
-    void shouldUpdate() throws Exception {
+    @Order(3)
+    void shouldUpdateRegion() throws Exception {
         String content = objectMapper.writeValueAsString(regionsRequestUpdateDto());
         mockMvc.perform(MockMvcRequestBuilders.put(createRegion)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -77,7 +90,14 @@ public class ControllerCrudTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.regione", Matchers.is("PippoUpdate".toUpperCase())))
         ;
-        content = objectMapper.writeValueAsString(provinciesRequestUpdateDto());
+
+
+    }
+
+    @Test
+    @Order(4)
+    void shouldUpdateProvince() throws Exception {
+        String content = objectMapper.writeValueAsString(provinciesRequestUpdateDto());
         System.out.println(createProvince);
         mockMvc.perform(MockMvcRequestBuilders.put(createProvince)
                         .contentType(MediaType.APPLICATION_JSON)
@@ -86,7 +106,12 @@ public class ControllerCrudTest {
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.provincia", Matchers.is("PippoUpdate".toUpperCase())))
         ;
-        content = objectMapper.writeValueAsString(citiesRequestUpdateDto());
+    }
+
+    @Test
+    @Order(5)
+    void shouldUpdateCity() throws Exception {
+        String content = objectMapper.writeValueAsString(citiesRequestUpdateDto());
         mockMvc.perform(MockMvcRequestBuilders.put(createCities)
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
@@ -97,17 +122,39 @@ public class ControllerCrudTest {
     }
 
     @Test
-    @Order(2)
-    void shouldDelete() throws Exception {
+    @Order(6)
+    void shouldDeleteCity() throws Exception {
         mockMvc.perform(MockMvcRequestBuilders.delete(createCities))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+    }
+
+    @Test
+    @Order(7)
+    void shouldDeleteProvince() throws Exception {
+
         mockMvc.perform(MockMvcRequestBuilders.delete(createProvince))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
+
+    }
+
+    @Test
+    @Order(8)
+    void shouldDeleteRegion() throws Exception {
+
         mockMvc.perform(MockMvcRequestBuilders.delete(createRegion))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isNoContent());
+    }
+    @Test
+    @Order(9)
+    void shouldDeleteCityBad() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete(createCities))
+                .andDo(MockMvcResultHandlers.print())
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
+
     }
 
     private CitiesRequestUpdateDto citiesRequestUpdateDto() {

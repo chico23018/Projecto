@@ -1,6 +1,6 @@
 package it.fabrick.meteo.crud;
 
-import it.fabrick.meteo.controller.MeteoController;
+import it.fabrick.meteo.controller.region.RegionsController;
 import it.fabrick.meteo.dto.dtoRegions.RegionsRequestCreateDto;
 import it.fabrick.meteo.dto.dtoRegions.RegionsRequestUpdateDto;
 import it.fabrick.meteo.dto.dtoRegions.RegionsResponseDto;
@@ -24,7 +24,7 @@ public class CrudTest {
     @MockBean
     private RegionsService regionsRepository;
     @Autowired
-    private MeteoController meteoController;
+    private RegionsController meteoController;
 
     @Test
     void shouldFindAll() {
