@@ -70,8 +70,6 @@ public final class Utility {
     public static float mediaTempera( List<Float> temperature) {
         float mediaTemperature = 0;
 
-
-
             mediaTemperature=  temperature.stream()
                     .reduce(Float::sum).get()/ temperature.size()
             ;

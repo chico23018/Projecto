@@ -32,13 +32,13 @@ public class RestControllerTest {
     @Test
     void shouldReadRegion() throws Exception {
 
-        String content = objectMapper.writeValueAsString(create("lombardia", 10000));
+        String content = objectMapper.writeValueAsString(create("lombardia", 100000));
         mockMvc.perform(MockMvcRequestBuilders.post(path3 +search+ "/regions")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.greaterThan(3)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.is(4)));
     }
 
     @Test
@@ -53,13 +53,13 @@ public class RestControllerTest {
 
     @Test
     void shouldReadProvinvia() throws Exception {
-        String content = objectMapper.writeValueAsString(create("milano", 10000));
+        String content = objectMapper.writeValueAsString(create("milano", 50000));
         mockMvc.perform(MockMvcRequestBuilders.post(path3+search + "/provincia")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.greaterThan(3)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.is(5)));
     }
 
     @Test
@@ -75,26 +75,26 @@ public class RestControllerTest {
     @Test
     void shouldReadCity() throws Exception {
         RequestNunResident requestNunResident = new RequestNunResident();
-        requestNunResident.setNumResident(1000);
+        requestNunResident.setNumResident(500000);
         String content = objectMapper.writeValueAsString(requestNunResident);
         mockMvc.perform(MockMvcRequestBuilders.post(path3+search + "/city")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
-                .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.greaterThan(3)));
+                .andExpect(MockMvcResultMatchers.jsonPath("$.length()", Matchers.is(6)));
     }
 
     @Test
     void shouldReadCityBadRequest() throws Exception {
         RequestNunResident requestNunResident = new RequestNunResident();
-        requestNunResident.setNumResident(0);
+        requestNunResident.setNumResident(5000000);
         String content = objectMapper.writeValueAsString(requestNunResident);
         mockMvc.perform(MockMvcRequestBuilders.post(path3+search + "/city")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(content))
                 .andDo(MockMvcResultHandlers.print())
-                .andExpect(MockMvcResultMatchers.status().isBadRequest());
+                .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
 
 

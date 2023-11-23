@@ -15,6 +15,8 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.time.LocalDate;
+
 import static it.fabrick.meteo.constant.Constant.path;
 import static it.fabrick.meteo.constant.Constant.searchForecast;
 
@@ -79,10 +81,10 @@ public class MeteoController {
         validationService.doValidate(days);
 
 
-        return ResponseEntity.ok(citiesService.readForecastDate(days.getPlace(), days.getDate()));
+        return ResponseEntity.ok(citiesService.readForecastDate(days.getPlace(), LocalDate.parse(days.getDate())));
     }
 
-    @Operation(description = "read weather forecast for province and date")
+    @Operation(description = "read weather forecast for province and date,return the average temperature")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "DATA NOT VALID",
@@ -93,10 +95,10 @@ public class MeteoController {
                     content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
     })
     @PostMapping(searchForecast+"/provincia")
-    public ResponseEntity<String> readForecasProvicia(@Schema(description = "date formatter yyyy-MM-dd", implementation = WeatherRequestDto.class)
+    public ResponseEntity<String> readForecastProvince(@Schema(description = "date formatter yyyy-MM-dd", implementation = WeatherRequestDto.class)
                                                       @RequestBody WeatherRequestDto weatherRequestDto) {
         validationService.doValidate(weatherRequestDto);
-        String media = citiesService.readForecastProvincia(weatherRequestDto.getPlace(), weatherRequestDto.getDate());
+        String media = citiesService.readForecastProvincia(weatherRequestDto.getPlace(),  LocalDate.parse(weatherRequestDto.getDate()));
 
 
         return ResponseEntity.ok(media);

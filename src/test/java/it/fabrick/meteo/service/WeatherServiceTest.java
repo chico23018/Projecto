@@ -61,7 +61,7 @@ class WeatherServiceTest {
     void readForecastDate() throws Exception {
         WeatherRequestDto weatherRequestDto = new WeatherRequestDto();
         weatherRequestDto.setPlace("milano");
-        weatherRequestDto.setDate(LocalDate.parse("2023-11-10"));
+        weatherRequestDto.setDate("2023-11-10");
 
         String content = objectMapper.writeValueAsString(weatherRequestDto);
         mockMvc.perform(MockMvcRequestBuilders.post(path +searchForecast+ "/date")
@@ -75,7 +75,7 @@ class WeatherServiceTest {
     void readForecastProvince() throws Exception {
         WeatherRequestDto weatherRequestDto = new WeatherRequestDto();
         weatherRequestDto.setPlace("milano");
-        weatherRequestDto.setDate(LocalDate.parse("2023-11-10"));
+        weatherRequestDto.setDate("2023-11-10");
 
         String content = objectMapper.writeValueAsString(weatherRequestDto);
         mockMvc.perform(MockMvcRequestBuilders.post(path +searchForecast+ "/provincia")
@@ -87,7 +87,7 @@ class WeatherServiceTest {
     private WeatherRequestDto create(String place, LocalDate numResident) {
         WeatherRequestDto weatherRequestDto = new WeatherRequestDto();
         weatherRequestDto.setPlace(place);
-        weatherRequestDto.setDate(numResident);
+        weatherRequestDto.setDate(numResident.toString());
 
         return weatherRequestDto;
     }

@@ -14,6 +14,7 @@ public class OpenApiConfiguration {
         return GroupedOpenApi.builder()
                 .group("region")
                 .packagesToScan("it.fabrick.meteo.controller.region")
+
                 .build();
     }
     @Bean

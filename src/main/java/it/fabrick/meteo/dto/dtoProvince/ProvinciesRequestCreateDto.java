@@ -7,6 +7,7 @@ import lombok.Setter;
 import javax.validation.constraints.Min;
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 
 @Getter
@@ -16,11 +17,12 @@ public class ProvinciesRequestCreateDto {
     @Schema(description = "sigla ")
     @NotNull(message = "Should not be null")
     @NotBlank(message = "Should not be blank")
+    @Pattern(regexp = "[\\w\\s\\'\\-]+",message = "Only letters, spaces, - and '  are accepted ")
     private String sigla;
     @Schema(description = "province ")
     @NotNull(message = "Should not be null")
     @NotBlank(message = "Should not be blank")
-
+    @Pattern(regexp = "[\\w\\s\\'\\-]+",message = "Only letters, spaces, - and '  are accepted ")
     private String provincia;
     @Schema(description = "surface")
     @Min(value = 1, message = "Should not be 0")

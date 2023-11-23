@@ -39,7 +39,7 @@ public class ResidentController {
     private final ICitiesMapper iCitiesMapper;
 
     private final IMunicipalityMapper iMunicipalityMapper;
-    @Operation(description = "read city greater than a number inhabitants")
+    @Operation(description = "read city greater than a number inhabitants the Italy")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "DATA NOT VALID",
@@ -59,7 +59,7 @@ public class ResidentController {
         return ResponseEntity.ok(responseDtos);
     }
 
-    @Operation(description = "read city greater than a number inhabitants")
+    @Operation(description = "read city greater than a number inhabitants for regions")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "DATA NOT VALID",
@@ -80,7 +80,7 @@ public class ResidentController {
                 .collect(Collectors.toList()));
     }
 
-    @Operation(description = "read city greater than a number inhabitants")
+    @Operation(description = "read city greater than a number inhabitants for province")
     @ApiResponses(value = {
             @ApiResponse(responseCode = "200", description = "OK"),
             @ApiResponse(responseCode = "400", description = "DATA NOT VALID",
