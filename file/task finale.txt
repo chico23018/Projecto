@@ -20,7 +20,7 @@ Ricordate che:
 
 
 https://api.open-meteo.com/v1/forecast
-
+     
 https://reqbin.com/
 https://api.open-meteo.com/v1/forecast?latitude=52.52,7.30434392&longitude=13.41,45.31511014&daily=temperature_2m_max&forecast_days=1
 https://api.open-meteo.com/v1/forecast?latitude=52.52,7.30434392&longitude=13.41,45.31511014&daily=temperature_2m_max&start_date=2023-11-14&end_date=2023-11-18
