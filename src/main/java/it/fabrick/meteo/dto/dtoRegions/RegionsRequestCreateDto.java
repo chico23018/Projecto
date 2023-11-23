@@ -42,7 +42,7 @@ public class RegionsRequestCreateDto {
     @Schema(description = "pec")
     @NotNull(message = "Should not be null")
     @NotBlank(message = "Should not be blank")
-    @Pattern(regexp = "EMAIL",message = "Should contains  EMAIL")
+    @Pattern(regexp ="^(.+)@(\\S+)$",message = "Should contains  EMAIL")
     private String pec;
     @Schema(description = "sito ")
     @NotNull(message = "Should not be null")

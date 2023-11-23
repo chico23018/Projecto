@@ -16,7 +16,7 @@ public class RequestNunResidentAndPlace {
     @Schema(description = "take the place ")
     @NotNull(message = "Should not be null")
     @NotBlank(message = "Should not be blank")
-    @Pattern(regexp =  "^[a-zA-Z0-9]")
+    @Pattern(regexp =  "[\\w\\s\\-\\']+")
     private String place;
     @Schema(description = "number resident")
     @Min(value = 1, message = "Should not be 0")
