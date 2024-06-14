@@ -26,7 +26,7 @@ public class RegionsService {
 
         this.data = data;
         this.iRegionsMapper = iRegionsMapper;
-        data.saveData();
+        //data.saveData();
     }
 
     public RegionsModel readRegion(String region) {

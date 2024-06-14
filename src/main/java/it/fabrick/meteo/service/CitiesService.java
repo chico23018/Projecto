@@ -31,12 +31,13 @@ public class CitiesService {
     private final ICitiesMapper iCitiesMapper;
     private final WeatherService weatherService;
     private final IWeatherMapper iWeatherMapper;
-    private GeographicalRepository geographicalRepository;
+    private final GeographicalRepository geographicalRepository;
     private final ProvinciesRepository provinciesRepository;
     private final RegionsRepository regionsRepository;
 
     public List<CitiesModel> readGreater(int numResident) {
         List<CitiesModel> citiesModels;
+
         try {
             citiesModels = citiesRepository.findByNumResidentGreaterThan(numResident)
                     .stream()

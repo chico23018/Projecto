@@ -34,6 +34,12 @@
         <url>https://github.com/open-meteo/sdk</url>
     </scm>
     <dependencies>
+
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-actuator</artifactId>
+        </dependency>
+
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-validation</artifactId>
@@ -88,9 +94,22 @@
             <artifactId>httpclient</artifactId>
             <version>4.5.14</version>
         </dependency>
+        <dependency>
+            <groupId>io.projectreactor</groupId>
+            <artifactId>reactor-core</artifactId>
+            <version>3.4.10</version> <!-- Versión actual al momento de escribir esto -->
+        </dependency>
 
     </dependencies>
     <build>
+        <resources>
+            <resource>
+                <directory>src/main/resources/json</directory>
+                <includes>
+                    <include>**/*.json</include>
+                </includes>
+            </resource>
+        </resources>
         <plugins>
             <plugin>
                 <groupId>org.springframework.boot</groupId>
@@ -118,6 +137,8 @@
                             <version>${lombok.mapstruct.binding.version}</version>
                         </path>
                     </annotationProcessorPaths>
+                    <source>11</source>
+                    <target>11</target>
                 </configuration>
             </plugin>
         </plugins>

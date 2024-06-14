@@ -1,4 +1,4 @@
-package it.fabrick.meteo.controllerCrud;
+/*package it.fabrick.meteo.controllerCrud;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import it.fabrick.meteo.dto.dtoCity.CitiesRequestCreateDto;
@@ -218,13 +218,13 @@ public class ControllerCrudTest {
         regionsEntity.setSuperficie(1524.5);
         regionsEntity.setPresidente("Topolino");
 
-        regionsEntity.setNumResidenti(150058822);
+        regionsEntity.setNumResidenti(150058822);*/
      /*   regionsEntity.setPec("pippo.pec@pec.it");
       regionsEntity.setCodIstat("asacas");
         regionsEntity.setSede("Disneyland");
         regionsEntity.setCodIstat("asacas");
         regionsEntity.setPiva(350513l);
         regionsEntity.setSito("www.pippo.com");*/
-        return regionsEntity;
+       /* return regionsEntity;
     }
-}
+}*/

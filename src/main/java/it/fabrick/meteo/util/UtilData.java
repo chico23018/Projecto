@@ -2,22 +2,18 @@ package it.fabrick.meteo.util;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import it.fabrick.meteo.DataJson.CitiesJson;
-import it.fabrick.meteo.DataJson.GeograJson;
-import it.fabrick.meteo.DataJson.MunicipalityJson;
-import it.fabrick.meteo.DataJson.ProvinJson;
 import it.fabrick.meteo.entity.*;
 import it.fabrick.meteo.repository.*;
 import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
-import java.io.BufferedWriter;
+import javax.annotation.PostConstruct;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.LinkedList;
 import java.util.List;
 
 @Service
@@ -119,31 +115,41 @@ public class UtilData {
 
     }*/
 
-   /* private void createJson() {
-        try
-            {
-           // objectMapper.writeValue(new File("json/munic.json"), municipalityRepository.findAll());
-             // objectMapper.writeValue(new File("json/cities.json"), citiesRepository.findAll());
-             // objectMapper.writeValue(new File("json/geogra.json"), geographicalRepository.findAll());
-            objectMapper.writeValue(new File("json/regionsAll.json"), regionsRepository.findAll());
-            objectMapper.writeValue(new File("json/provinAll.json"),provinciesRepository.findAll());
-            } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+    /* private void createJson() {
+         try
+             {
+            // objectMapper.writeValue(new File("json/munic.json"), municipalityRepository.findAll());
+              // objectMapper.writeValue(new File("json/cities.json"), citiesRepository.findAll());
+              // objectMapper.writeValue(new File("json/geogra.json"), geographicalRepository.findAll());
+             objectMapper.writeValue(new File("json/regionsAll.json"), regionsRepository.findAll());
+             objectMapper.writeValue(new File("json/provinAll.json"),provinciesRepository.findAll());
+             } catch (IOException e) {
+             throw new RuntimeException(e);
+         }
 
-    }
-*/
+     }
+ */
+    @Autowired
+    ResourceLoader resourceLoader;
+
+    //@PostConstruct
     public void saveData() {
+
+        Resource resource = resourceLoader.getResource("classpath:" + "regionsAll.json");
+        Resource resource1 = resourceLoader.getResource("classpath:" + "cities.json");
+        Resource resource2 = resourceLoader.getResource("classpath:" + "geogra.json");
+        Resource resource3 = resourceLoader.getResource("classpath:" + "provinAll.json");
+        Resource resource4 = resourceLoader.getResource("classpath:" + "munic.json");
         try {
-            List<RegionsEntity> lis = objectMapper.readValue(new File("json/regionsAll.json"), new TypeReference<List<RegionsEntity>>() {
+            List<RegionsEntity> lis = objectMapper.readValue(new File(resource.getURI()), new TypeReference<List<RegionsEntity>>() {
             });
-            List<CitiesEntity> lis1 = objectMapper.readValue(new File("json/cities.json"), new TypeReference<List<CitiesEntity>>() {
+            List<CitiesEntity> lis1 = objectMapper.readValue(new File(resource1.getURI()), new TypeReference<List<CitiesEntity>>() {
             });
-            List<GeographicalEntity> lis3 = objectMapper.readValue(new File("json/geogra.json"), new TypeReference<List<GeographicalEntity>>() {
+            List<GeographicalEntity> lis3 = objectMapper.readValue(new File(resource2.getURI()), new TypeReference<List<GeographicalEntity>>() {
             });
-            List<ProvinciesEntity> lis2 = objectMapper.readValue(new File("json/provinAll.json"), new TypeReference<List<ProvinciesEntity>>() {
+            List<ProvinciesEntity> lis2 = objectMapper.readValue(new File(resource3.getURI()), new TypeReference<List<ProvinciesEntity>>() {
             });
-            List<MunicipalityEntity> lis4 = objectMapper.readValue(new File("json/munic.json"), new TypeReference<List<MunicipalityEntity>>() {
+            List<MunicipalityEntity> lis4 = objectMapper.readValue(new File(resource4.getURI()), new TypeReference<List<MunicipalityEntity>>() {
             });
             regionsRepository.saveAllAndFlush(lis);
             provinciesRepository.saveAllAndFlush(lis2);
