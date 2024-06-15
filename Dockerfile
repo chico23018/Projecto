@@ -9,15 +9,19 @@
 #WORKDIR /app
 #COPY --from=build /app/target/meteo-0.0.1-SNAPSHOT.jar app.jar
 #CMD ["java", "-jar", "app.jar"]
+# Etapa de construcción
 FROM maven:3.8.4-openjdk-11-slim AS builder
 WORKDIR /app
 COPY ./ /app/
 RUN mvn clean package
 
+# Etapa de ejecución
 FROM adoptopenjdk/openjdk11:alpine-jre
 COPY --from=builder /app/target/meteo-0.0.1-SNAPSHOT.jar /app/
+ENV PORT 8080
 EXPOSE 8080
-CMD ["java", "-jar", "/app/meteo-0.0.1-SNAPSHOT.jar"]
+CMD ["sh", "-c", "java -Dserver.port=${PORT} -jar /app/meteo-0.0.1-SNAPSHOT.jar"]
+
 #kubectl apply -f deployment.yaml
 #kubectl apply -f service.yaml
 #kubectl delete pod meteojson-56465d54d7-8ggwt
