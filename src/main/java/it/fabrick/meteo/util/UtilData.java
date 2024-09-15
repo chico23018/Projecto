@@ -12,8 +12,8 @@ import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
-import java.io.File;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.List;
 
 @Service
@@ -132,7 +132,7 @@ public class UtilData {
     @Autowired
     ResourceLoader resourceLoader;
 
-    //@PostConstruct
+    @PostConstruct
     public void saveData() {
 
         Resource resource = resourceLoader.getResource("classpath:" + "regionsAll.json");
@@ -140,16 +140,20 @@ public class UtilData {
         Resource resource2 = resourceLoader.getResource("classpath:" + "geogra.json");
         Resource resource3 = resourceLoader.getResource("classpath:" + "provinAll.json");
         Resource resource4 = resourceLoader.getResource("classpath:" + "munic.json");
-        try {
-            List<RegionsEntity> lis = objectMapper.readValue(new File(resource.getURI()), new TypeReference<List<RegionsEntity>>() {
+        try (InputStream inputStream = resource.getInputStream();
+             InputStream inputStream1 = resource1.getInputStream();
+             InputStream inputStream2 = resource2.getInputStream();
+             InputStream inputStream3 = resource3.getInputStream();
+             InputStream inputStream4 = resource4.getInputStream()) {
+            List<RegionsEntity> lis = objectMapper.readValue(inputStream, new TypeReference<List<RegionsEntity>>() {
             });
-            List<CitiesEntity> lis1 = objectMapper.readValue(new File(resource1.getURI()), new TypeReference<List<CitiesEntity>>() {
+            List<CitiesEntity> lis1 = objectMapper.readValue(inputStream1, new TypeReference<List<CitiesEntity>>() {
             });
-            List<GeographicalEntity> lis3 = objectMapper.readValue(new File(resource2.getURI()), new TypeReference<List<GeographicalEntity>>() {
+            List<GeographicalEntity> lis3 = objectMapper.readValue(inputStream2, new TypeReference<List<GeographicalEntity>>() {
             });
-            List<ProvinciesEntity> lis2 = objectMapper.readValue(new File(resource3.getURI()), new TypeReference<List<ProvinciesEntity>>() {
+            List<ProvinciesEntity> lis2 = objectMapper.readValue(inputStream3, new TypeReference<List<ProvinciesEntity>>() {
             });
-            List<MunicipalityEntity> lis4 = objectMapper.readValue(new File(resource4.getURI()), new TypeReference<List<MunicipalityEntity>>() {
+            List<MunicipalityEntity> lis4 = objectMapper.readValue(inputStream4, new TypeReference<List<MunicipalityEntity>>() {
             });
             regionsRepository.saveAllAndFlush(lis);
             provinciesRepository.saveAllAndFlush(lis2);
@@ -164,4 +168,3 @@ public class UtilData {
 
 
 }
-
