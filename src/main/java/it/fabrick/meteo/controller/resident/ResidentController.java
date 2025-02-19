@@ -37,82 +37,82 @@ import static it.fabrick.meteo.constant.Constant.search;
 @AllArgsConstructor
 @Slf4j
 public class ResidentController {
-        private final CitiesService citiesService;
-        private final MunicipalityService municipalityService;
-        private final ValidationService validationService;
-        private final ICitiesMapper iCitiesMapper;
+    private final CitiesService citiesService;
+    private final MunicipalityService municipalityService;
+    private final ValidationService validationService;
+    private final ICitiesMapper iCitiesMapper;
 
-        private final IMunicipalityMapper iMunicipalityMapper;
- static Integer iiinput;
-        @Operation(description = "read city greater than a number inhabitants the Italy")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "OK"),
-                        @ApiResponse(responseCode = "400", description = "DATA NOT VALID", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-                        @ApiResponse(responseCode = "404", description = "NOT FOUND", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-                        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-        })
-        @PostMapping(search + "/city")
-        public Mono<ResponseEntity<List<CitiesResponseDto>>> readGreaterTha(
-                        @RequestBody RequestNunResident requestNunResident) throws InterruptedException {
-                validationService.doValidate(requestNunResident);
-                if(iiinput==null)
-                        iiinput=0;
-                iiinput++;
-            log.info(String.valueOf(iiinput));
-                if(requestNunResident.getNumResident()==100000)
-                    Thread.sleep(10000);
+    private final IMunicipalityMapper iMunicipalityMapper;
+    static Integer iiinput;
 
-                return Mono.fromCallable(() -> citiesService.readGreater(requestNunResident.getNumResident()))
-                                .flatMapMany(Flux::fromIterable)
-                                .flatMap(entity -> Mono.just(iCitiesMapper.responseFromModel(entity)))
-                                .collectList()
-                                .map(ResponseEntity::ok);
-/*
-                return ResponseEntity.ok(citiesService.readGreater(requestNunResident.getNumResident())
+    @Operation(description = "read city greater than a number inhabitants the Italy")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "DATA NOT VALID", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @PostMapping(search + "/city")
+    public ResponseEntity<List<CitiesResponseDto>> readGreaterTha(
+            @RequestBody RequestNunResident requestNunResident) throws InterruptedException {
+        validationService.doValidate(requestNunResident);
+        if (iiinput == null)
+            iiinput = 0;
+        iiinput++;
+        log.info(String.valueOf(iiinput));
+        if (requestNunResident.getNumResident() == 100000)
+            Thread.sleep(10000);
+//tengo que hacer tambien test reactivos
+     /*   return Mono.fromCallable(() -> citiesService.readGreater(requestNunResident.getNumResident()))
+                .onErrorMap(throwable -> throwable)
+                .flatMapMany(Flux::fromIterable)
+                .flatMap(entity -> Mono.just(iCitiesMapper.responseFromModel(entity)))
+                .collectList()
+                .map(citiesResponseDtos -> ResponseEntity.ok(citiesResponseDtos));
+             */   return ResponseEntity.ok(citiesService.readGreater(requestNunResident.getNumResident())
                                 .stream()
                                 .map(iCitiesMapper::responseFromModel)
                                 .collect(Collectors.toList()));
-*/
 
-        }
+    }
 
-        @Operation(description = "read city greater than a number inhabitants for regions")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "OK"),
-                        @ApiResponse(responseCode = "400", description = "DATA NOT VALID", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-                        @ApiResponse(responseCode = "404", description = "NOT FOUND", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-                        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-        })
-        @PostMapping(search + "/regions")
-        public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreaterByRegion(
-                        @RequestBody RequestNunResidentAndPlace requestNunResidentAndPlace) {
-                validationService.doValidate(requestNunResidentAndPlace);
-                List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreaterByRegion(
-                                requestNunResidentAndPlace.getNumResident(), requestNunResidentAndPlace.getPlace());
+    @Operation(description = "read city greater than a number inhabitants for regions")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "DATA NOT VALID", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @PostMapping(search + "/regions")
+    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreaterByRegion(
+            @RequestBody RequestNunResidentAndPlace requestNunResidentAndPlace) {
+        validationService.doValidate(requestNunResidentAndPlace);
+        List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreaterByRegion(
+                requestNunResidentAndPlace.getNumResident(), requestNunResidentAndPlace.getPlace());
 
-                return ResponseEntity.ok(municipalityModel.stream()
-                                .map(iMunicipalityMapper::responseFromModel)
-                                .collect(Collectors.toList()));
-        }
+        return ResponseEntity.ok(municipalityModel.stream()
+                .map(iMunicipalityMapper::responseFromModel)
+                .collect(Collectors.toList()));
+    }
 
-        @Operation(description = "read city greater than a number inhabitants for province")
-        @ApiResponses(value = {
-                        @ApiResponse(responseCode = "200", description = "OK"),
-                        @ApiResponse(responseCode = "400", description = "DATA NOT VALID", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-                        @ApiResponse(responseCode = "404", description = "NOT FOUND", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
-                        @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
-        })
-        @PostMapping(search + "/provincia")
-        public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreaterByProvince(
-                        @RequestBody RequestNunResidentAndPlace requestNunResidentAndPlace) {
-                validationService.doValidate(requestNunResidentAndPlace);
+    @Operation(description = "read city greater than a number inhabitants for province")
+    @ApiResponses(value = {
+            @ApiResponse(responseCode = "200", description = "OK"),
+            @ApiResponse(responseCode = "400", description = "DATA NOT VALID", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "404", description = "NOT FOUND", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class))),
+            @ApiResponse(responseCode = "500", description = "INTERNAL SERVER ERROR", content = @Content(schema = @Schema(implementation = ErrorResponseDto.class)))
+    })
+    @PostMapping(search + "/provincia")
+    public ResponseEntity<List<MunicipalityResponseDto>> readMunicipalityGreaterByProvince(
+            @RequestBody RequestNunResidentAndPlace requestNunResidentAndPlace) {
+        validationService.doValidate(requestNunResidentAndPlace);
 
-                List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreaterByProvinvia(
-                                requestNunResidentAndPlace.getNumResident(), requestNunResidentAndPlace.getPlace());
+        List<MunicipalityModel> municipalityModel = municipalityService.readMunicipalityGreaterByProvinvia(
+                requestNunResidentAndPlace.getNumResident(), requestNunResidentAndPlace.getPlace());
 
-                return ResponseEntity.ok(municipalityModel.stream()
-                                .map(iMunicipalityMapper::responseFromModel)
-                                .collect(Collectors.toList()));
-        }
+        return ResponseEntity.ok(municipalityModel.stream()
+                .map(iMunicipalityMapper::responseFromModel)
+                .collect(Collectors.toList()));
+    }
 
 }

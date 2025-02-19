@@ -18,8 +18,12 @@ RUN mvn clean package
 # Etapa de ejecución
 FROM adoptopenjdk/openjdk11:alpine-jre
 COPY --from=builder /app/target/meteo-0.0.1-SNAPSHOT.jar /app/
-ENV PORT 8080
-EXPOSE 8080
+#para definir el argumento del puedo 
+#ARG PORT=8080
+ENV PORT 9092
+EXPOSE 9092
+#ENV SERVE_PORT $PORT
+#EXPOSE $SERVE_PORT
 CMD ["sh", "-c", "java -Dserver.port=${PORT} -jar /app/meteo-0.0.1-SNAPSHOT.jar"]
 
 #kubectl apply -f deployment.yaml
@@ -28,6 +32,6 @@ CMD ["sh", "-c", "java -Dserver.port=${PORT} -jar /app/meteo-0.0.1-SNAPSHOT.jar"
 #kubectl delete pod meteojson-d66c9d6d8-82rmb
 #kubectl delete pod meteojson-d66c9d6d8-9drd2
 #kubectl delete pod meteojson-d66c9d6d8-llpzk
-#docker build -t meteoconjson1 .
+#docker build --build-arg PORT=9090 -t meteoconjson1 .
 #docker build -t tu-repositorio/proyecto_principal:latest .
 #docker run -p 8080:8080 meteoconjson

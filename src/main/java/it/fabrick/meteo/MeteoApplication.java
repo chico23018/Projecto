@@ -15,7 +15,7 @@ public class MeteoApplication {
 	}
 
 	static String getPort() {
-		String port = System.getenv("PORT");
+		String port = System.getenv("server.port");
 		if (port == null) {
 			port = "8080";
 		}

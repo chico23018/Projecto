@@ -1,4 +1,3 @@
-/*
 package it.fabrick.meteo.service;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -95,4 +94,4 @@ class WeatherServiceTest {
         return weatherRequestDto;
     }
 
-}*/
+}
