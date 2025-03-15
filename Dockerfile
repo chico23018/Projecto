@@ -24,7 +24,7 @@ ENV PORT 9092
 EXPOSE 9092
 #ENV SERVE_PORT $PORT
 #EXPOSE $SERVE_PORT
-CMD ["sh", "-c", "java -Dserver.port=${PORT} -jar /app/meteo-0.0.1-SNAPSHOT.jar"]
+CMD ["sh", "-c", "java -Dserver.port=${PORT} -jar /app/meteo-0.0.2.jar"]
 
 #kubectl apply -f deployment.yaml
 #kubectl apply -f service.yaml
