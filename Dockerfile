@@ -17,7 +17,7 @@ RUN mvn clean package
 
 # Etapa de ejecución
 FROM adoptopenjdk/openjdk11:alpine-jre
-COPY --from=builder /app/target/meteo-0.0.1-SNAPSHOT.jar /app/
+COPY --from=builder /app/target/meteo-0.0.2.jar /app/
 #para definir el argumento del puedo 
 #ARG PORT=8080
 ENV PORT 9092
